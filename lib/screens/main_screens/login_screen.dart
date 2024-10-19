@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:findik_muhasebe/services/mongodb.dart';
 import 'package:findik_muhasebe/widgets/loading_bar.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -245,7 +246,9 @@ class _LoginScreenState extends State<LoginScreen> {
     String hashedPassword = _hashPassword(password); // Şifreyi hash'le
 
     var user = await MongoDatabase.fetchUserByUsername(username); // Kullanıcıyı veritabanından al
-    print(user); // Kullanıcı bilgilerini kontrol et
+    if (kDebugMode) {
+      print(user);
+    } // Kullanıcı bilgilerini kontrol et
 
 
     if (!mounted) return;

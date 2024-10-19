@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
 class CustomerScreen extends StatelessWidget {
+  const CustomerScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Müşteri Ekranı'),
+        title: const Text('Müşteri Ekranı'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -13,10 +15,10 @@ class CustomerScreen extends StatelessWidget {
           itemCount: 10, // Örnek veri sayısı
           itemBuilder: (context, index) {
             return Card(
-              margin: EdgeInsets.symmetric(vertical: 8.0),
+              margin: const EdgeInsets.symmetric(vertical: 8.0),
               child: ListTile(
                 title: Text('Müşteri ${index + 1}'),
-                subtitle: Column(
+                subtitle: const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('Bakiye: 1000 TL'),
@@ -24,7 +26,7 @@ class CustomerScreen extends StatelessWidget {
                     Text('Ödemeler: 300 TL'),
                   ],
                 ),
-                trailing: Icon(Icons.arrow_forward),
+                trailing: const Icon(Icons.arrow_forward),
                 onTap: () {
                   // Müşteri detaylarına gitmek için fonksiyon
                 },
