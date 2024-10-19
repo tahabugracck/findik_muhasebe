@@ -5,4 +5,4 @@
 const MONGO_CONN_URL = "mongodb://localhost:27017/";
 
 // user koleksiyonu bağlantısı
-const USER_COLLECTION = "users";
+const USERS_COLLECTION = "users";

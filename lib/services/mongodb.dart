@@ -8,7 +8,7 @@ import 'package:mongo_dart/mongo_dart.dart';
 
 class MongoDatabase {
   static late Db db;
-  static late DbCollection userCollection;
+  static late DbCollection usersCollection;
 
   static final Logger _logger = Logger('MongoDatabase');
 
@@ -33,7 +33,7 @@ class MongoDatabase {
 
   // Koleksiyonları başlatma
   static void _initializeCollections() {
-    userCollection = db.collection(USER_COLLECTION);
+    usersCollection = db.collection(USERS_COLLECTION);
   }
 
   // MongoDB bağlantısını kapatma
@@ -47,4 +47,19 @@ class MongoDatabase {
       _logger.severe("MongoDB bağlantısını kapatırken hata oluştu: $e");
     }
   }
+
+  // Kullanıcı adı ile kullanıcıyı veritabanında arayan metod
+  static Future<Map<String, dynamic>?> fetchUserByUsername(String username) async {
+    try {
+        final user = await usersCollection.findOne(where.eq('username', username));
+        return user;
+    } catch (e) {
+        _logger.severe('Kullanıcı aranırken hata oluştu: $e');
+        if (kDebugMode) {
+            print('Kullanıcı aranırken hata oluştu: $e');
+        }
+    }
+    return null;
+}
+
 }
