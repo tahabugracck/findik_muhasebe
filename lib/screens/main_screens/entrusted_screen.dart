@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 
-class EmanetScreen extends StatelessWidget {
-  const EmanetScreen({super.key});
+class EntrustedScreen extends StatelessWidget {
+  const EntrustedScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

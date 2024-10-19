@@ -1,7 +1,22 @@
-import 'package:flutter/material.dart';
+// ignore_for_file: library_private_types_in_public_api
 
-class HomeScreen extends StatelessWidget {
+import 'package:flutter/material.dart';
+import 'package:findik_muhasebe/widgets/custom_drawer.dart';
+
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  Widget _selectedPage = const Center(
+    child: Text(
+      'Hoşgeldiniz, burası ana sayfanız!',
+      style: TextStyle(fontSize: 24),
+    ),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -9,25 +24,16 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Ana Sayfa'),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'Hoşgeldiniz, burası ana sayfanız!',
-              style: TextStyle(fontSize: 24),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // Toptancı ekranına gitmek için buton
-                Navigator.pushNamed(context, '/toptanci');
-              },
-              child: const Text('Toptancı Ekranına Git'),
-            ),
-          ],
-        ),
+      drawer: CustomDrawer(
+        hasMobileScreen: true,
+        onMenuItemSelected: (Widget page) {
+          setState(() {
+            _selectedPage = page; // Seçilen sayfayı günceller
+          });
+          Navigator.of(context).pop(); // Menüyü kapat
+        },
       ),
+      body: _selectedPage,
     );
   }
 }
