@@ -23,10 +23,10 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       // Uygulamanın başlangıç ekranı LoginScreen olacak
-      home: const LoginScreen(),
+      home: const HomeScreen(),
       // Rota tanımlamaları
       routes: {
-        '/toptanci': (context) => const HomeScreen(), // Eğer toptancı ekranı tanımlandıysa
+        '/admin': (context) => const HomeScreen(), // Eğer toptancı ekranı tanımlandıysa
       },
     );
   }
