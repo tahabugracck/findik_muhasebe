@@ -13,4 +13,6 @@ lib/
 ├── crypto/                // SHA-256 şifre çözme fonksiyonları için oluşturulacak klasör
 │   └── password_crypto.dart
 │
-└── main.dart
+└── widgets/
+│
+│__main.dart
