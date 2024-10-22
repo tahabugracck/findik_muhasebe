@@ -1,17 +1,11 @@
-import 'dart:convert';
-
 import 'package:mongo_dart/mongo_dart.dart';
 
-UserAdminModel userAdminModelFromJson(String str) => UserAdminModel.fromJson(json.decode(str));
-
-String userAdminModelToJson(UserAdminModel data) => json.encode(data.toJson());
-
 class UserAdminModel {
-  ObjectId id;
-  String name;
-  String password;
-  bool admin;
-  String username;
+  final ObjectId id;
+  final String name;
+  final String password;
+  final bool admin;
+  final String username;
 
   UserAdminModel({
     required this.id,

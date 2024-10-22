@@ -128,7 +128,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
           
           buildListTile(Icons.arrow_back_rounded, 'Ana Sayfa', Container(), () {
             Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => const LoginScreen()),
+              MaterialPageRoute(builder: (context) => LoginScreen()),
             );
           }),
         ],

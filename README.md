@@ -1,5 +1,7 @@
 # findik_muhasebe
 
+Windows App Hazelnut Accounting with Flutter by flower
+
 lib/
 │
 ├── models/
