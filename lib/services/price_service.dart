@@ -23,11 +23,11 @@ class PriceService {
           
           // Eğer hücre sayısı uygun ise ve ortalama fiyat başlığı var ise
           if (cells.length >= 5) {
-            var borsaAdi = cells[0]?.text.trim(); // Borsa adını al
-            var ortalamaFiyat = cells[4]?.text.trim(); // Ortalama fiyat hücresini al
+            var borsaAdi = cells[0].text.trim(); // Borsa adını al
+            var ortalamaFiyat = cells[4].text.trim(); // Ortalama fiyat hücresini al
 
             // Eğer fiyat boş ya da null ise hata mesajı döndür
-            if (ortalamaFiyat == null || ortalamaFiyat.isEmpty) {
+            if (ortalamaFiyat.isEmpty) {
               throw Exception('Ortalama fiyat bulunamadı');
             }
 
