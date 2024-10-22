@@ -1,6 +1,8 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'package:findik_muhasebe/widgets/theme_notifier.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -31,6 +33,7 @@ class _SettingsScreenState extends State<SettingsScreen> with SingleTickerProvid
         title: const Text('Ayarlar Ekranı'),
         bottom: TabBar(
           controller: _tabController,
+          indicatorColor: Colors.white,
           tabs: const [
             Tab(text: 'Kullanıcı Bilgileri'),
             Tab(text: 'Çalışan Ekle'),
@@ -55,25 +58,101 @@ class UserInfoTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
+
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Kullanıcı Bilgileri', style: TextStyle(fontSize: 20)),
+          const Text('Kullanıcı Bilgileri', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
           const SizedBox(height: 20),
           const TextField(
-            decoration: InputDecoration(labelText: 'Kullanıcı Adı'),
+            decoration: InputDecoration(
+              labelText: 'Kullanıcı Adı',
+              border: OutlineInputBorder(),
+            ),
           ),
+          const SizedBox(height: 16),
           const TextField(
-            decoration: InputDecoration(labelText: 'Şifre'),
+            decoration: InputDecoration(
+              labelText: 'Şifre',
+              border: OutlineInputBorder(),
+            ),
             obscureText: true,
           ),
           const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: () {
-              // Bilgileri güncelleme fonksiyonu
+          Center(
+            child: ElevatedButton(
+              onPressed: () {
+                // Bilgileri güncelleme fonksiyonu
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Theme.of(context).primaryColor,
+                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+              ),
+              child: const Text('Güncelle'),
+            ),
+          ),
+          const SizedBox(height: 40),
+          const Text('Tema Değiştir', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  themeNotifier.setDarkTheme();
+                },
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                ),
+                child: const Text('Koyu Tema'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  themeNotifier.setWhiteTheme();
+                },
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                ),
+                child: const Text('Açık Tema'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  themeNotifier.setStandardTheme();
+                },
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                ),
+                child: const Text('Standart Tema'),
+              ),
+            ],
+          ),
+          const SizedBox(height: 40),
+          const Text('Hakkında', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 10),
+          ListTile(
+            title: const Text('Uygulama Hakkında', style: TextStyle(fontSize: 16)),
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: const Text('Hakkında'),
+                    content: const Text(
+                      'Uygulama Versiyonu: 1.0.0\nGeliştirici: Taha Buğra Çiçek',
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        child: const Text('Tamam'),
+                      ),
+                    ],
+                  );
+                },
+              );
             },
-            child: const Text('Güncelle'),
           ),
         ],
       ),
@@ -89,21 +168,35 @@ class EmployeeAddTab extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Çalışan Ekle', style: TextStyle(fontSize: 20)),
+          const Text('Çalışan Ekle', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
           const SizedBox(height: 20),
           const TextField(
-            decoration: InputDecoration(labelText: 'Çalışan Adı'),
+            decoration: InputDecoration(
+              labelText: 'Çalışan Adı',
+              border: OutlineInputBorder(),
+            ),
           ),
+          const SizedBox(height: 16),
           const TextField(
-            decoration: InputDecoration(labelText: 'Çalışan Pozisyonu'),
+            decoration: InputDecoration(
+              labelText: 'Çalışan Pozisyonu',
+              border: OutlineInputBorder(),
+            ),
           ),
           const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: () {
-              // Çalışanı ekleme fonksiyonu
-            },
-            child: const Text('Ekle'),
+          Center(
+            child: ElevatedButton(
+              onPressed: () {
+                // Çalışanı ekleme fonksiyonu
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Theme.of(context).primaryColor,
+                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+              ),
+              child: const Text('Ekle'),
+            ),
           ),
         ],
       ),

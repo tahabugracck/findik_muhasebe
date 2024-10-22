@@ -1,32 +1,23 @@
 import 'package:findik_muhasebe/screens/main_screens/home_screen.dart';
 import 'package:findik_muhasebe/screens/main_screens/login_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:findik_muhasebe/services/mongodb.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  // MongoDB bağlantısını başlat
-  await MongoDatabase.connect();
-
-  runApp(const MyApp());
+void main() {
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Fındık Muhasebe', 
+      title: 'Findik Muhasebe',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.green,
       ),
-      // Uygulamanın başlangıç ekranı LoginScreen olacak
-      home: const HomeScreen(),
-      // Rota tanımlamaları
+      home: LoginScreen(), // LoginScreen'i başlangıç ekranı yap
       routes: {
-        '/admin': (context) => const HomeScreen(), // Eğer toptancı ekranı tanımlandıysa
+        // Ana ekran rotasını tanımlayın
+        '/home': (context) => HomeScreen(), // HomeScreen sınıfını uygun bir şekilde tanımlayın
       },
     );
   }
