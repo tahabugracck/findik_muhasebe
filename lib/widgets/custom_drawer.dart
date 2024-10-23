@@ -1,29 +1,28 @@
 // ignore_for_file: library_private_types_in_public_api
 
-import 'package:findik_muhasebe/screens/main_screens/entrusted_screen.dart';
-import 'package:findik_muhasebe/screens/main_screens/factory_operations_screen.dart';
+import 'package:findik_muhasebe/screens/main_screens/account_movements_screen.dart';
+import 'package:findik_muhasebe/screens/main_screens/cash_folder/cash_screen.dart';
+import 'package:findik_muhasebe/screens/main_screens/customer_screen.dart';
+import 'package:findik_muhasebe/screens/main_screens/entrusted_and_factory_operations_folder/entrusted_and_factory_operations_screen.dart';
+import 'package:findik_muhasebe/screens/main_screens/invoice_screen.dart';
 import 'package:findik_muhasebe/screens/main_screens/login_screen.dart';
-import 'package:findik_muhasebe/screens/main_screens/customer_screen.dart'; // Müşteri ekranı
-import 'package:findik_muhasebe/screens/main_screens/sales_screen.dart';
-import 'package:findik_muhasebe/screens/main_screens/stock_screen.dart'; // Stok ekranı
-import 'package:findik_muhasebe/screens/main_screens/invoice_screen.dart'; // Fatura işlemleri ekranı
-import 'package:findik_muhasebe/screens/main_screens/cash_screen.dart'; // Kasa işlemleri ekranı
-import 'package:findik_muhasebe/screens/main_screens/settings_screen.dart'; // Ayarlar ekranı
-import 'package:findik_muhasebe/screens/main_screens/price_update_screen.dart'; // Fiyat güncelle ekranı
-import 'package:findik_muhasebe/screens/main_screens/account_movements_screen.dart'; // Cari hareketler ekranı
-import 'package:findik_muhasebe/screens/main_screens/report_screen.dart'; // Rapor ekranı
-import 'package:findik_muhasebe/screens/main_screens/preliminary_accounting_screen.dart'; // Ön muhasebe ekranı
-import 'package:findik_muhasebe/screens/main_screens/product_entry_screen.dart'; // Ürün girişi ekranı
+import 'package:findik_muhasebe/screens/main_screens/price_update_screen.dart';
+import 'package:findik_muhasebe/screens/main_screens/product_folder/product_operations_screen.dart';
+import 'package:findik_muhasebe/screens/main_screens/report_screen.dart';
+import 'package:findik_muhasebe/screens/main_screens/settings_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:findik_muhasebe/models/user_admin.dart'; // UserAdminModel'i içeri aktarın
 
 class CustomDrawer extends StatefulWidget {
   final bool hasMobileScreen;
   final Function(Widget) onMenuItemSelected;
+  final UserAdminModel user; // Kullanıcı modelini al
 
   const CustomDrawer({
     super.key,
     required this.hasMobileScreen,
     required this.onMenuItemSelected,
+    required this.user, // Kullanıcı modelini parametre olarak ekleyin
   });
 
   @override
@@ -105,19 +104,22 @@ class _CustomDrawerState extends State<CustomDrawer> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  buildListTile(Icons.person, 'Müşteri', const CustomerScreen()),
-                  buildListTile(Icons.storage, 'Stok', const StockScreen()),
-                  buildListTile(Icons.file_copy, 'Fatura İşlemleri', const InvoiceScreen()),
-                  buildListTile(Icons.account_balance_wallet, 'Kasa İşlemleri', const CashScreen()),
-                  buildListTile(Icons.settings, 'Ayarlar', const SettingsScreen()),
-                  buildListTile(Icons.factory, 'Fabrika İşlemleri', const FactoryOperationsScreen()),
-                  buildListTile(Icons.receipt, 'Emanet', const EntrustedScreen()),
-                  buildListTile(Icons.price_change, 'Fiyat Güncelle', const PriceUpdateScreen()),
-                  buildListTile(Icons.sell, 'Satış', const SalesScreen()),
-                  buildListTile(Icons.account_balance, 'Cari Hareketler', const AccountMovementsScreen()),
-                  buildListTile(Icons.assessment, 'Rapor', const ReportScreen()),
-                  buildListTile(Icons.article, 'Ön Muhasebe', const PreliminaryAccountingScreen()),
-                  buildListTile(Icons.add_box, 'Ürün Girişi', const ProductEntryScreen()),
+                  if (widget.user.accessRights['customer'] == true) // Müşteri erişimi
+                    buildListTile(Icons.person, 'Müşteri', const CustomerScreen()),
+                  if (widget.user.accessRights['accountMovements'] == true) // Cari Hareketler erişimi
+                    buildListTile(Icons.account_balance, 'Cari Hareketler', const AccountMovementsScreen()),
+                  if (widget.user.accessRights['entrustedAndFactoryOperations'] == true) // Fabrika İşlemleri erişimi
+                    buildListTile(Icons.factory, 'Fabrika İşlemleri ve Emanet İşlemleri', const EntrustedAndFactoryOperationsScreen()),
+                  if (widget.user.accessRights['productOperations'] == true) // Ürün işlemleri erişimi
+                    buildListTile(Icons.storage, 'Stok', const ProductOperationsScreen()),
+                  if (widget.user.accessRights['invoiceOperations'] == true) // Fatura işlemleri erişimi
+                    buildListTile(Icons.account_balance_wallet, 'Fatura İşlemleri', const InvoiceScreen()),
+                  if (widget.user.accessRights['cashOperations'] == true) // Kasa işlemleri erişimi
+                    buildListTile(Icons.account_balance_wallet, 'Kasa İşlemleri', const CashScreen()),
+                  if (widget.user.accessRights['report'] == true) // Rapor erişimi
+                    buildListTile(Icons.assessment, 'Rapor', const ReportScreen()),
+                  if (widget.user.accessRights['priceUpdate'] == true) // Fiyat güncelle erişimi
+                    buildListTile(Icons.price_change, 'Fiyat Güncelle', const PriceUpdateScreen()),
                 ],
               ),
             ),
@@ -125,7 +127,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
           // Alt kısma ayarlar ve kullanıcı değiştirme
           Divider(color: Colors.white.withOpacity(0.2)), // Alttaki çizgi
-          
+          buildListTile(Icons.settings, 'Ayarlar', const SettingsScreen()),
+
           buildListTile(Icons.arrow_back_rounded, 'Ana Sayfa', Container(), () {
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(builder: (context) => const LoginScreen()),

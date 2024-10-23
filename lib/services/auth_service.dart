@@ -18,16 +18,16 @@ class AuthService {
 
         // Şifreyi karşılaştır
         if (PasswordCrypto.verifyPassword(password, user.password)) {
-          return user; // giriş başarılı
+          return user; // Giriş başarılı
         }
       }
     } catch (e) {
       if (kDebugMode) {
         print('Giriş sırasında hata: $e');
       }
-    }finally {
+    } finally {
       await db.close();
     }
-    return null;
+    return null; // Giriş başarısız
   }
 }

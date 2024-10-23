@@ -1,10 +1,13 @@
 // ignore_for_file: library_private_types_in_public_api
 
-import 'package:flutter/material.dart';
+import 'package:findik_muhasebe/models/user_admin.dart';
 import 'package:findik_muhasebe/widgets/custom_drawer.dart';
+import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final UserAdminModel user; // Kullanıcı bilgisini al
+
+  const HomeScreen({super.key, required this.user}); // Yapıcı metodunu güncelle
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -26,6 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       drawer: CustomDrawer(
         hasMobileScreen: true,
+        user: widget.user, // Kullanıcı bilgisini geç
         onMenuItemSelected: (Widget page) {
           setState(() {
             _selectedPage = page; // Seçilen sayfayı günceller
@@ -33,7 +37,15 @@ class _HomeScreenState extends State<HomeScreen> {
           Navigator.of(context).pop(); // Menüyü kapat
         },
       ),
-      body: _selectedPage,
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/background.jpg'), // Resim dosyasının yolu
+            fit: BoxFit.cover, // Resmi kapsamak için
+          ),
+        ),
+        child: _selectedPage,
+      ),
     );
   }
 }
