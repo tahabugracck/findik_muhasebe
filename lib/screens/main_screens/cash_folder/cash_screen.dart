@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 
 class CashScreen extends StatefulWidget {
@@ -63,8 +65,8 @@ class _CashScreenState extends State<CashScreen> with SingleTickerProviderStateM
           ),
           // Preliminary Accounting Card
           if (_showPreliminaryAccounting)
-            Card(
-              margin: const EdgeInsets.all(16.0),
+            const Card(
+              margin: EdgeInsets.all(16.0),
               child: PreliminaryAccountingScreen(),
             ),
         ],
