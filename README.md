@@ -2,6 +2,8 @@
 
 Windows App Hazelnut Accounting with Flutter by flower
 
+assets/
+
 lib/
 │
 ├── models/
