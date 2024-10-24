@@ -9,7 +9,7 @@ import 'package:findik_muhasebe/screens/main_screens/login_screen.dart';
 import 'package:findik_muhasebe/screens/main_screens/price_update_screen.dart';
 import 'package:findik_muhasebe/screens/main_screens/product_folder/product_operations_screen.dart';
 import 'package:findik_muhasebe/screens/main_screens/report_screen.dart';
-import 'package:findik_muhasebe/screens/main_screens/settings_screen.dart';
+import 'package:findik_muhasebe/screens/main_screens/settings_folder/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:findik_muhasebe/models/user_admin.dart'; // UserAdminModel'i içeri aktarın
 
@@ -127,6 +127,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
           // Alt kısma ayarlar ve kullanıcı değiştirme
           Divider(color: Colors.white.withOpacity(0.2)), // Alttaki çizgi
+          if (widget.user.accessRights['settings'] == true) // Ayarlar erişimi
           buildListTile(Icons.settings, 'Ayarlar', const SettingsScreen()),
 
           buildListTile(Icons.arrow_back_rounded, 'Ana Sayfa', Container(), () {

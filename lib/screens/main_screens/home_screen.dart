@@ -15,10 +15,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   Widget _selectedPage = const Center(
-    child: Text(
-      'Hoşgeldiniz, burası ana sayfanız!',
-      style: TextStyle(fontSize: 24),
-    ),
   );
 
   @override
