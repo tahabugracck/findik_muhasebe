@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
 
+import 'package:findik_muhasebe/models/user.dart';
 import 'package:findik_muhasebe/services/constant.dart';
 import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
@@ -61,6 +62,26 @@ class MongoDatabase {
     }
     return null;
 }
+static Future<List<UserModel>?> fetchEmployees() async {
+  try {
+    final employee = await usersCollection.find(where.eq('usersCollection/user.admin', false)).toList();
+
+    List<UserModel> employeeList = employee.map((employee) {
+      return UserModel.fromJson(employee);
+    }).toList();
+
+    return employeeList;
+  } catch (e) {
+    _logger.severe('Çalışanlar aranırken hata oluştu: $e');
+    if (kDebugMode) {
+      print('Çalışanlar aranırken hata oluştu: $e');
+    }
+  }
+  return null;
+  }
 
 
+
+  // todo: çalışanlar listelenmiyor. koleksiyonu boş dönderiyor. 
 }
+

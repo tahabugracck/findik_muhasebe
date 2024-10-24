@@ -1,11 +1,15 @@
 import 'package:findik_muhasebe/screens/main_screens/home_screen.dart';
 import 'package:findik_muhasebe/screens/main_screens/login_screen.dart';
+import 'package:findik_muhasebe/services/mongodb.dart';
 import 'package:findik_muhasebe/widgets/theme_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart'; // Provider'ı içe aktarın
 import 'package:findik_muhasebe/models/user_admin.dart'; // Kullanıcı modelini içe aktarın
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized(); // Flutter uygulaması başlatılmadan önce bu çağrıyı yapın
+  await MongoDatabase.connect(); // MongoDB bağlantısını kurun
+
   runApp(const MyApp());
 }
 
@@ -19,7 +23,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ThemeNotifier()), // ThemeNotifier sağlayıcısını ekleyin
       ],
       child: MaterialApp(
-        title: 'Findik Muhasebe',
+        title: 'Fındık Muhasebe',
         theme: ThemeData(
           primarySwatch: Colors.green,
         ),
