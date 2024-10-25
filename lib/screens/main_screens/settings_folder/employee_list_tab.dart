@@ -1,33 +1,26 @@
 // ignore_for_file: library_private_types_in_public_api
-
 import 'package:findik_muhasebe/models/user.dart';
 import 'package:findik_muhasebe/services/mongodb.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
 class EmployeeListTab extends StatefulWidget {
   const EmployeeListTab({super.key});
-
   @override
   _EmployeeListTabState createState() => _EmployeeListTabState();
 }
-
 class _EmployeeListTabState extends State<EmployeeListTab> {
   List<UserModel> _employees = [];
   String? _errorMessage;
   bool _isLoading = true; // Veri yüklenme durumu
-
   @override
   void initState() {
     super.initState();
     _fetchEmployees(); // Çalışan verilerini getir
   }
-
   Future<void> _fetchEmployees() async {
     setState(() {
       _isLoading = true; // Veri yükleniyor durumu
     });
-
     try {
       final employees = await MongoDatabase.fetchEmployees(); // Veritabanından çalışanları al
       setState(() {
@@ -35,7 +28,6 @@ class _EmployeeListTabState extends State<EmployeeListTab> {
         _errorMessage = null; // Başarılı olursa hata mesajını sıfırla
         _isLoading = false; // Veri yüklenmesi bitti
       });
-
       if (kDebugMode) {
         print('Çalışan Verileri:');
         for (var employee in _employees) {
@@ -52,7 +44,6 @@ class _EmployeeListTabState extends State<EmployeeListTab> {
       }
     }
   }
-
   void _goToEmployeeDetail(UserModel employee) {
     // Çalışan detaylarına gitme işlemi
     Navigator.push(
@@ -62,7 +53,6 @@ class _EmployeeListTabState extends State<EmployeeListTab> {
       ),
     );
   }
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -82,7 +72,6 @@ class _EmployeeListTabState extends State<EmployeeListTab> {
                         final accessRights = employee.accessRights.keys
                             .where((key) => employee.accessRights[key] == true)
                             .join(', '); // Erişebildiği ekranlar
-
                         return Card(
                           margin: const EdgeInsets.symmetric(vertical: 8.0),
                           child: ListTile(
@@ -105,12 +94,9 @@ class _EmployeeListTabState extends State<EmployeeListTab> {
     );
   }
 }
-
 class EmployeeDetailPage extends StatelessWidget {
   final UserModel employee;
-
   const EmployeeDetailPage({super.key, required this.employee});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
