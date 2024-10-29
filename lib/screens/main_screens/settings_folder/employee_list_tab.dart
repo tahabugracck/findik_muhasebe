@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:findik_muhasebe/models/user.dart';
 import 'package:findik_muhasebe/services/mongodb.dart';
 import 'package:flutter/foundation.dart';

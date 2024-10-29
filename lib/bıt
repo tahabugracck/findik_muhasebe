@@ -6,7 +6,6 @@ backend
 -hesap hareketleri fonksiyonları düzelt
 -rapor hareketleri muhtemelen veritabanına bağlanmaz ama nasıl çalışması gerektiğini öğren
 -ayarlar kullanıcı bilgileri: kullanıcı adı ve şifre görünmesi lazım. güncelle butonu ile değiştirilmeli
--ayarlar tema değiştirme fonksiyonunu düzenle
 -ayalar hakkında kısmını düzenle
 
 

@@ -3,17 +3,15 @@ import 'package:findik_muhasebe/screens/main_screens/login_screen.dart';
 import 'package:findik_muhasebe/services/mongodb.dart';
 import 'package:findik_muhasebe/widgets/theme_notifier.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart'; // Provider'ı içe aktarın
-import 'package:findik_muhasebe/models/user_admin.dart'; // Kullanıcı modelini içe aktarın
+import 'package:provider/provider.dart';
+import 'package:findik_muhasebe/models/user_admin.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized(); // Flutter uygulaması başlatılmadan önce bu çağrıyı yapın
-  await MongoDatabase.connect(); // MongoDB bağlantısını kurun
-
+  WidgetsFlutterBinding.ensureInitialized();
+  await MongoDatabase.connect();
 
   runApp(const MyApp());
 }
-
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -22,16 +20,19 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => ThemeNotifier()), // ThemeNotifier sağlayıcısını ekleyin
+        ChangeNotifierProvider(create: (_) => ThemeNotifier()), // ThemeNotifier sağlayıcısını ekledik
       ],
-      child: MaterialApp(
-        title: 'Fındık Muhasebe',
-        theme: ThemeData(
-          primarySwatch: Colors.green,
-        ),
-        home: const LoginScreen(), // LoginScreen'i başlangıç ekranı yap
-        routes: {
-          '/home': (context) => HomeScreen(user: ModalRoute.of(context)!.settings.arguments as UserAdminModel), // Kullanıcı bilgisi ile HomeScreen
+      child: Consumer<ThemeNotifier>(
+        builder: (context, themeNotifier, child) {
+          return MaterialApp(
+            title: 'Fındık Muhasebe',
+            theme: themeNotifier.currentTheme, // Geçerli temayı al
+            home: const LoginScreen(), // LoginScreen'i başlangıç ekranı yap
+            routes: {
+              '/home': (context) => HomeScreen(
+                  user: ModalRoute.of(context)!.settings.arguments as UserAdminModel), // Kullanıcı bilgisi ile HomeScreen
+            },
+          );
         },
       ),
     );
