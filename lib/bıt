@@ -1,1 +1,29 @@
- //TODO : Auth Provider dosyası hazırla. kullanımını öğren.
+backend
+
+-müşteri ekranını veritabanına bağla
+  -müşteri ekle, müşteri sil, müşteri listele, müşteri güncelle
+-cari hareketler ve tahsilat tablosunun ne işe yaradığını öğren veritabanı eklentisini yap
+-fabrika ve emanet ekranının fonksiyonlarını yaz. usersa bağla. 
+-ürün işlemleri fonksiyon yaz.
+-hesap hareketleri fonksiyonları düzelt
+-rapor hareketleri muhtemelen veritabanına bağlanmaz ama nasıl çalışması gerektiğini öğren
+-ayarlar kullanıcı bilgileri: kullanıcı adı ve şifre görünmesi lazım. güncelle butonu ile değiştirilmeli
+-ayarlar tema değiştirme fonksiyonunu düzenle
+-ayalar hakkında kısmını düzenle
+-ayarlar çalışan eklemeyi düzenle
+-ayarlar çalışan listeleme fonksiyonunu kontrol et
+
+frontend
+-loginScreende gif telfi yiyebilir. öğren
+-ana ekran fındık resmini düzenle
+-müşteri ekranı tasarımı iyileştir
+-cari hareketler ve tahsilat tablosu sayfasının tasarımını iyileştir
+-fabrika ve emanet ekranının tasarımını iyileştir. abaut dialog kullan
+-ürün işlemleri tasarımı ayarla
+-hesap hareketlerine ön muhasebe butonu ekle
+-rapor ekranının tasarımını yenile
+-fiyat çekme ekranının tasarımını yenile.
+
+soru
+-fatura işlemleri gerekli mi öğren
+

@@ -2,7 +2,6 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:findik_muhasebe/screens/main_screens/settings_folder/employee_add_tab.dart';
-import 'package:findik_muhasebe/screens/main_screens/settings_folder/employee_list_tab.dart';
 import 'package:findik_muhasebe/screens/main_screens/settings_folder/user_info_tab.dart';
 import 'package:flutter/material.dart';
 
@@ -19,7 +18,7 @@ class _SettingsScreenState extends State<SettingsScreen> with SingleTickerProvid
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 2, vsync: this);
   }
 
   @override
@@ -38,7 +37,7 @@ class _SettingsScreenState extends State<SettingsScreen> with SingleTickerProvid
           tabs: const [
             Tab(text: 'Kullanıcı Bilgileri'),
             Tab(text: 'Çalışan Ekle'),
-            Tab(text: 'Çalışan Listesi'),
+            //Tab(text: 'Çalışan Listesi'),
           ],
         ),
       ),
@@ -47,7 +46,7 @@ class _SettingsScreenState extends State<SettingsScreen> with SingleTickerProvid
         children: const [
           UserInfoTab(),
           EmployeeAddTab(),
-          EmployeeListTab(),
+         // EmployeeListTab(),
         ],
       ),
     );

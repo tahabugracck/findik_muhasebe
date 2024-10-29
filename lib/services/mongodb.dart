@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
-import 'package:findik_muhasebe/models/user.dart';
 import 'package:findik_muhasebe/services/constant.dart';
 import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
@@ -9,6 +8,7 @@ import 'package:mongo_dart/mongo_dart.dart';
 class MongoDatabase {
   static late Db db;
   static late DbCollection usersCollection;
+  static late DbCollection customersCollection;
 
   static final Logger _logger = Logger('MongoDatabase');
 
@@ -34,6 +34,7 @@ class MongoDatabase {
   // Koleksiyonları başlatma
   static void _initializeCollections() {
     usersCollection = db.collection(USERS_COLLECTION);
+    customersCollection = db.collection(CUSTOMERS_COLLECTION);
   }
 
   // MongoDB bağlantısını kapatma
@@ -64,6 +65,102 @@ class MongoDatabase {
     return null;
   }
 
+
+  // Tüm müşterileri çekme fonksiyonu
+  static Future<List<Map<String, dynamic>>> fetchAllCustomers() async {
+    try {
+      final customers = await customersCollection.find().toList();
+      return customers;
+    } catch (e) {
+      _logger.severe('Müşterileri çekerken bir hata oluştu: $e');
+      if (kDebugMode) {
+        print('Müşterileri çekerken bir hata oluştu: $e');
+      }
+    }
+    return [];
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+/*
   static Future<List<UserModel>?> fetchEmployees() async {
     try {
       final employee = await usersCollection
@@ -84,8 +181,9 @@ class MongoDatabase {
     return null;
   }
 
-  // todo: çalışanlar listelenmiyor. koleksiyonu boş dönderiyor.
 
+*/
+/*
  // Kart hareketini eklemek için metod
   static Future<void> addCardMovement(
       String userId, Map<String, dynamic> data) async {
@@ -257,7 +355,7 @@ class MongoDatabase {
       return [];
     }
   }
-
+*/
 
 
 }
