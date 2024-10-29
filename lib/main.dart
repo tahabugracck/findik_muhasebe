@@ -10,8 +10,10 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // Flutter uygulaması başlatılmadan önce bu çağrıyı yapın
   await MongoDatabase.connect(); // MongoDB bağlantısını kurun
 
+
   runApp(const MyApp());
 }
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

@@ -81,108 +81,124 @@ class MongoDatabase {
   }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-/*
-  static Future<List<UserModel>?> fetchEmployees() async {
+// Sadece admin olmayan kullanıcıları çekme fonksiyonu
+static Future<List<Map<String, dynamic>>> fetchEmployee() async {
+  try {
+    final employee = await usersCollection.find({'admin': false}).toList();
+    return employee;
+  } catch (e) {
+    _logger.severe('Çalışanları çekerken bir hata oluştu: $e');
+    if (kDebugMode) {
+      print('Çalışanları çekerken bir hata oluştu: $e');
+    }
+  }
+  return [];
+}
+
+// Çalışanı silme fonksiyonu
+  static Future<void> deleteEmployee(ObjectId id) async {
     try {
-      final employee = await usersCollection
-          .find(where.eq('admin', false))
-          .toList();
-
-      List<UserModel> employeeList = employee.map((employee) {
-        return UserModel.fromJson(employee);
-      }).toList();
-
-      return employeeList;
-    } catch (e) {
-      _logger.severe('Çalışanlar aranırken hata oluştu: $e');
+      await usersCollection.remove(where.id(id));
       if (kDebugMode) {
-        print('Çalışanlar aranırken hata oluştu: $e');
+        _logger.info('Çalışan silindi: $id');
+      }
+    } catch (e) {
+      _logger.severe('Çalışan silinirken hata oluştu: $e');
+      if (kDebugMode) {
+        print('Çalışan silinirken hata oluştu: $e');
       }
     }
-    return null;
   }
 
+// Çalışan ekleme fonksiyonu
+static Future<void> addEmployee(Map<String, dynamic> employeeData) async {
+  try {
+    await usersCollection.insert(employeeData);
+    if (kDebugMode) {
+      _logger.info('Çalışan eklendi: $employeeData');
+    }
+  } catch (e) {
+    _logger.severe('Çalışan eklenirken hata oluştu: $e');
+    if (kDebugMode) {
+      print('Çalışan eklenirken hata oluştu: $e');
+    }
+  }
+}
 
-*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*
  // Kart hareketini eklemek için metod
   static Future<void> addCardMovement(

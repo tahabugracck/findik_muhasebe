@@ -54,9 +54,10 @@ class _PriceUpdateScreenState extends State<PriceUpdateScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Fiyat Güncelle'),
+        backgroundColor: Colors.green, // Başlık rengini yeşil yap
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(20.0),
         child: isLoading
             ? const Center(child: CircularProgressIndicator()) // Yükleniyor göstergesi
             : Column(
@@ -66,17 +67,34 @@ class _PriceUpdateScreenState extends State<PriceUpdateScreen> {
                     currentPrice != null
                         ? 'Mevcut Fındık Fiyatı: ${currentPrice!.toStringAsFixed(2)} TL'
                         : errorMessage, // Hata mesajı göster
-                    style: const TextStyle(fontSize: 20),
+                    style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 20),
                   ElevatedButton(
-                    onPressed: _fetchCurrentPrice, // Fiyatı yeniden güncelle
+                    onPressed: _fetchCurrentPrice,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green, // Buton rengi
+                      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 30), // Buton içi boşluk
+                      textStyle: const TextStyle(fontSize: 18), // Buton yazı boyutu
+                    ), // Fiyatı yeniden güncelle
                     child: const Text('Fiyatı Güncelle'),
                   ),
+                  const SizedBox(height: 20),
+                  if (errorMessage.isNotEmpty)
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.red[100],
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        errorMessage,
+                        style: const TextStyle(color: Colors.red, fontSize: 16),
+                      ),
+                    ),
                 ],
               ),
       ),
     );
   }
 }
-

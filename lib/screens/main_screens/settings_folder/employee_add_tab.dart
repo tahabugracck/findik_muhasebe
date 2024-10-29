@@ -1,8 +1,9 @@
-// employee_add_tab.dart
-// ignore_for_file: library_private_types_in_public_api, prefer_final_fields
+// ignore_for_file: use_build_context_synchronously, library_private_types_in_public_api
 
-import 'package:flutter/foundation.dart';
+import 'package:findik_muhasebe/services/mongodb.dart';
 import 'package:flutter/material.dart';
+import 'package:crypto/crypto.dart';
+import 'dart:convert'; // Base64 encoding
 
 class EmployeeAddTab extends StatefulWidget {
   const EmployeeAddTab({super.key});
@@ -16,7 +17,16 @@ class _EmployeeAddTabState extends State<EmployeeAddTab> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  final List<String> _screens = ['Müşteri Ekranı', 'Cari Hareketler', 'Fabrika ve Emanet İşlemleri', 'Ürün İşlemleri', 'Kasa İşlemleri', 'Rapor Ekranı', 'Fiyat Güncelle'];
+  final List<String> _screens = [
+    'Müşteri Ekranı',
+    'Cari Hareketler',
+    'Fabrika ve Emanet İşlemleri',
+    'Ürün İşlemleri',
+    'Kasa İşlemleri',
+    'Rapor Ekranı',
+    'Fiyat Güncelle'
+  ];
+  
   List<bool> _selectedScreens = [false, false, false, false, false, false, false];
 
   @override
@@ -27,34 +37,59 @@ class _EmployeeAddTabState extends State<EmployeeAddTab> {
     super.dispose();
   }
 
-  void _addEmployee() {
+  String _hashPassword(String password) {
+    // SHA-256 ile şifreyi hashle
+    final bytes = utf8.encode(password);
+    final digest = sha256.convert(bytes);
+    return digest.toString(); // Hash'lenmiş şifreyi döndür
+  }
+
+  void _addEmployee() async {
     String name = _nameController.text;
     String username = _usernameController.text;
     String password = _passwordController.text;
     bool isAdmin = false;
 
-    List<String> accessibleScreens = [];
-    for (int i = 0; i < _screens.length; i++) {
-      if (_selectedScreens[i]) {
-        accessibleScreens.add(_screens[i]);
-      }
-    }
+    // Erişebileceği ekranları oluştur
+    Map<String, bool> accessRights = {
+      'customer': _selectedScreens[0],
+      'accountMovements': _selectedScreens[1],
+      'entrustedAndFactoryOperations': _selectedScreens[2],
+      'productOperations': _selectedScreens[3],
+      'cashOperations': _selectedScreens[4],
+      'report': _selectedScreens[5],
+      'priceUpdate': _selectedScreens[6],
+      'settings': false, // Ayarlar varsayılan olarak false
+      'invoiceOperations': false // Fatura işlemleri varsayılan olarak false
+    };
 
-    if (kDebugMode) {
-      print('Çalışan Adı: $name');
-    }
-    if (kDebugMode) {
-      print('Kullanıcı Adı: $username');
-    }
-    if (kDebugMode) {
-      print('Şifre: $password');
-    }
-    if (kDebugMode) {
-      print('Admin mi: $isAdmin');
-    }
-    if (kDebugMode) {
-      print('Erişebileceği Ekranlar: $accessibleScreens');
-    }
+    // Şifreyi hashle
+    String hashedPassword = _hashPassword(password);
+
+    // Çalışan verilerini topla
+    Map<String, dynamic> employeeData = {
+      'name': name,
+      'username': username,
+      'password': hashedPassword, // Hash'lenmiş şifreyi ekle
+      'admin': isAdmin,
+      'accessRights': accessRights,
+    };
+
+    // Veritabanına ekleme işlemi
+    await MongoDatabase.addEmployee(employeeData);
+
+    // Başarı durumunda kullanıcıya bildirim
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Çalışan başarıyla eklendi!')),
+    );
+
+    // Formu temizle
+    _nameController.clear();
+    _usernameController.clear();
+    _passwordController.clear();
+    setState(() {
+      _selectedScreens = [false, false, false, false, false, false, false]; // Seçimleri sıfırla
+    });
   }
 
   @override

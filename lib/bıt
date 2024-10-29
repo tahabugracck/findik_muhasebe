@@ -1,7 +1,5 @@
 backend
 
--müşteri ekranını veritabanına bağla
-  -müşteri ekle, müşteri sil, müşteri listele, müşteri güncelle
 -cari hareketler ve tahsilat tablosunun ne işe yaradığını öğren veritabanı eklentisini yap
 -fabrika ve emanet ekranının fonksiyonlarını yaz. usersa bağla. 
 -ürün işlemleri fonksiyon yaz.
@@ -10,8 +8,7 @@ backend
 -ayarlar kullanıcı bilgileri: kullanıcı adı ve şifre görünmesi lazım. güncelle butonu ile değiştirilmeli
 -ayarlar tema değiştirme fonksiyonunu düzenle
 -ayalar hakkında kısmını düzenle
--ayarlar çalışan eklemeyi düzenle
--ayarlar çalışan listeleme fonksiyonunu kontrol et
+
 
 frontend
 -loginScreende gif telfi yiyebilir. öğren

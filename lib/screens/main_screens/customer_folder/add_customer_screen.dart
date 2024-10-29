@@ -76,7 +76,7 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
               // Fındık miktarı girişi için TextFormField
               TextFormField(
                 decoration: const InputDecoration(labelText: 'Fındık Miktarı'), // Label tanımı
-                keyboardType: TextInputType.numberWithOptions(decimal: true), // On sayı girişi için klavye
+                keyboardType: const TextInputType.numberWithOptions(decimal: true), // On sayı girişi için klavye
                 validator: (value) {
                   if (value!.isEmpty) {
                     return 'Lütfen bir miktar girin'; // Hata mesajı
