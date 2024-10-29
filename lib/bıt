@@ -11,7 +11,7 @@ backend
 
 frontend
 -loginScreende gif telfi yiyebilir. öğren
--ana ekran fındık resmini düzenle
+-ana ekran fındık resmini düzenle (kodda)
 -müşteri ekranı tasarımı iyileştir
 -cari hareketler ve tahsilat tablosu sayfasının tasarımını iyileştir
 -fabrika ve emanet ekranının tasarımını iyileştir. abaut dialog kullan
@@ -19,6 +19,7 @@ frontend
 -hesap hareketlerine ön muhasebe butonu ekle
 -rapor ekranının tasarımını yenile
 -fiyat çekme ekranının tasarımını yenile.
+-tema renklerini düzenle
 
 soru
 -fatura işlemleri gerekli mi öğren
