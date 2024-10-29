@@ -1,3 +1,4 @@
+/*
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:findik_muhasebe/screens/main_screens/cash_folder/add_movement_screen.dart';
@@ -268,3 +269,4 @@ class _CashRegisterScreenState extends State<CashRegisterScreen> {
     );
   }
 }
+*/
