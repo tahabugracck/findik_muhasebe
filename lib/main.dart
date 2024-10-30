@@ -33,6 +33,27 @@ try {
     }
   }
 
+
+try {
+    final payments = await MongoDatabase.fetchPaymentsMovements();
+    if (payments.isEmpty) {
+      if (kDebugMode) {
+        print('No payments movements found.');
+      }
+    } else {
+      for (var payment in payments) {
+        if (kDebugMode) {
+          print(payment);
+        }
+      }
+    }
+  } catch (e) {
+    if (kDebugMode) {
+      print('Error fetching payment movements: $e');
+    }
+  }
+
+
   runApp(const MyApp());
 }
 
@@ -52,7 +73,7 @@ class MyApp extends StatelessWidget {
           return MaterialApp(
             title: 'Fındık Muhasebe',
             theme: themeNotifier.currentTheme, // Geçerli temayı al
-          home: const Counter(), // Counter widget'ını başlangıç ekranı yap
+          home: const LoginScreen(), // Counter widget'ını başlangıç ekranı yap
 
             routes: {
               '/home': (context) => HomeScreen(

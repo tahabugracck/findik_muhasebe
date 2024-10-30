@@ -37,6 +37,8 @@ class CurrentMovementsModel {
         createdId: json['createdId'],
       );
 
+  get title => null;
+
   Map<String, dynamic> toJson() => {
         '_id': id,
         'customerId': customerId,

@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
 import 'package:findik_muhasebe/models/current_movements.dart';
+import 'package:findik_muhasebe/models/payments.dart';
 import 'package:findik_muhasebe/services/constant.dart';
 import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
@@ -11,6 +12,7 @@ class MongoDatabase {
   static late DbCollection usersCollection;
   static late DbCollection customersCollection;
   static late DbCollection currentMovementsCollection;
+  static late DbCollection paymentsCollection;
 
   static final Logger _logger = Logger('MongoDatabase');
 
@@ -38,6 +40,7 @@ class MongoDatabase {
     usersCollection = db.collection(USERS_COLLECTION);
     customersCollection = db.collection(CUSTOMERS_COLLECTION);
     currentMovementsCollection = db.collection(CURRENTMOVEMENTS_COLLECTION);
+    paymentsCollection = db.collection(PAYMENTS_COLLECTION);
   }
 
   // MongoDB bağlantısını kapatma
@@ -134,9 +137,13 @@ static Future<List<CurrentMovementsModel>> fetchCurrentMovements() async {
     final current = await currentMovementsCollection.find().toList();
 
     // Konsola yazdırma
-    print('Cari Hareketler:');
+    if (kDebugMode) {
+      print('Cari Hareketler:');
+    }
     for (var item in current) {
-      print(item);
+      if (kDebugMode) {
+        print(item);
+      }
     }
 
     return current.map((json) => CurrentMovementsModel.fromJson(json)).toList();
@@ -150,7 +157,30 @@ static Future<List<CurrentMovementsModel>> fetchCurrentMovements() async {
 }
 
 
+// Tahsilat hareketleri çekmek için fonksiyon
+static Future<List<PaymentsModel>> fetchPaymentsMovements() async {
+  try {
+    final payments = await paymentsCollection.find().toList();
 
+    // Konsola yazdırma
+    if (kDebugMode) {
+      print('Cari Hareketler:');
+    }
+    for (var item in payments) {
+      if (kDebugMode) {
+        print(item);
+      }
+    }
+
+    return payments.map((json) => PaymentsModel.fromJson(json)).toList();
+  } catch (e) {
+    _logger.severe('Hareketleri çekerken hata oluştu: $e');
+    if (kDebugMode) {
+      print('Hareketleri çekerken hata oluştu: $e');
+    }
+  } 
+  return [];
+}
 
 
 

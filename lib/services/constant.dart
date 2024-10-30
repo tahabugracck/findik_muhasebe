@@ -12,3 +12,6 @@ const CUSTOMERS_COLLECTION = "customers";
 
 // currentMovements koleksiyon bağlantısı
 const  CURRENTMOVEMENTS_COLLECTION = "currentMovements";
+
+// payments koleksiyon bağlantısı
+const PAYMENTS_COLLECTION = "payments";
