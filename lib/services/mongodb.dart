@@ -129,7 +129,6 @@ static Future<void> addEmployee(Map<String, dynamic> employeeData) async {
 }
 
 // Cari hareketleri çekmek için fonksiyon
-// Cari hareketleri çekmek için fonksiyon
 static Future<List<CurrentMovementsModel>> fetchCurrentMovements() async {
   try {
     final current = await currentMovementsCollection.find().toList();

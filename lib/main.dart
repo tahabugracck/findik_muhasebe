@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:findik_muhasebe/screens/main_screens/home_screen.dart';
 import 'package:findik_muhasebe/screens/main_screens/login_screen.dart';
 import 'package:findik_muhasebe/services/mongodb.dart';
@@ -50,7 +52,8 @@ class MyApp extends StatelessWidget {
           return MaterialApp(
             title: 'Fındık Muhasebe',
             theme: themeNotifier.currentTheme, // Geçerli temayı al
-            home: const LoginScreen(), // LoginScreen'i başlangıç ekranı yap
+          home: const Counter(), // Counter widget'ını başlangıç ekranı yap
+
             routes: {
               '/home': (context) => HomeScreen(
                   user: ModalRoute.of(context)!.settings.arguments
@@ -58,6 +61,38 @@ class MyApp extends StatelessWidget {
             },
           );
         },
+      ),
+    );
+  }
+}
+class Counter extends StatefulWidget {
+  const Counter({super.key});
+
+  @override
+  _CounterState createState() => _CounterState();
+}
+
+class _CounterState extends State<Counter> {
+  int _counter = 0;
+
+  void _incrementCounter() {
+    setState(() {
+      _counter++;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text('$_counter', style: Theme.of(context).textTheme.headlineMedium), // Sayacın değerini göster
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: _incrementCounter, // Butona tıklanınca sayacı artır
+          ),
+        ],
       ),
     );
   }
