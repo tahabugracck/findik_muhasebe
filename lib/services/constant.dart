@@ -9,3 +9,6 @@ const USERS_COLLECTION = "users";
 
 // customer koleksiyonu bağlantısı
 const CUSTOMERS_COLLECTION = "customers";
+
+// currentMovements koleksiyon bağlantısı
+const  CURRENTMOVEMENTS_COLLECTION = "currentMovements";

@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
+import 'package:findik_muhasebe/models/current_movements.dart';
 import 'package:findik_muhasebe/services/constant.dart';
 import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
@@ -9,6 +10,7 @@ class MongoDatabase {
   static late Db db;
   static late DbCollection usersCollection;
   static late DbCollection customersCollection;
+  static late DbCollection currentMovementsCollection;
 
   static final Logger _logger = Logger('MongoDatabase');
 
@@ -35,6 +37,7 @@ class MongoDatabase {
   static void _initializeCollections() {
     usersCollection = db.collection(USERS_COLLECTION);
     customersCollection = db.collection(CUSTOMERS_COLLECTION);
+    currentMovementsCollection = db.collection(CURRENTMOVEMENTS_COLLECTION);
   }
 
   // MongoDB bağlantısını kapatma
@@ -125,7 +128,27 @@ static Future<void> addEmployee(Map<String, dynamic> employeeData) async {
   }
 }
 
+// Cari hareketleri çekmek için fonksiyon
+// Cari hareketleri çekmek için fonksiyon
+static Future<List<CurrentMovementsModel>> fetchCurrentMovements() async {
+  try {
+    final current = await currentMovementsCollection.find().toList();
 
+    // Konsola yazdırma
+    print('Cari Hareketler:');
+    for (var item in current) {
+      print(item);
+    }
+
+    return current.map((json) => CurrentMovementsModel.fromJson(json)).toList();
+  } catch (e) {
+    _logger.severe('Hareketleri çekerken hata oluştu: $e');
+    if (kDebugMode) {
+      print('Hareketleri çekerken hata oluştu: $e');
+    }
+  } 
+  return [];
+}
 
 
 
