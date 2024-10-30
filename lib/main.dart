@@ -14,44 +14,6 @@ void main() async {
   await MongoDatabase.connect();
 
 
-try {
-    final currents = await MongoDatabase.fetchCurrentMovements();
-    if (currents.isEmpty) {
-      if (kDebugMode) {
-        print('No current movements found.');
-      }
-    } else {
-      for (var current in currents) {
-        if (kDebugMode) {
-          print(current);
-        }
-      }
-    }
-  } catch (e) {
-    if (kDebugMode) {
-      print('Error fetching current movements: $e');
-    }
-  }
-
-
-try {
-    final payments = await MongoDatabase.fetchPaymentsMovements();
-    if (payments.isEmpty) {
-      if (kDebugMode) {
-        print('No payments movements found.');
-      }
-    } else {
-      for (var payment in payments) {
-        if (kDebugMode) {
-          print(payment);
-        }
-      }
-    }
-  } catch (e) {
-    if (kDebugMode) {
-      print('Error fetching payment movements: $e');
-    }
-  }
 
 
   runApp(const MyApp());

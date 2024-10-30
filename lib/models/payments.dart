@@ -25,11 +25,11 @@ class PaymentsModel {
         id: json["_id"],
         customerId: json["customerId"],
         createdBy: json["createdBy"],
-        collectionDate: DateTime.parse(json["collectionDate"]),
+        collectionDate: json["collectionDate"],
         amount: json["amount"],
         method: json["method"],
         description: json["description"],
-        createdAt: DateTime.parse(json["createdAt"]),
+        createdAt: json["createdAt"],
       );
 
   get title => null;
