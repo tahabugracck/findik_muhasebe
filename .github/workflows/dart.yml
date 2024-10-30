@@ -13,14 +13,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Flutter SDK kurulumunu yapar
+      # Flutter SDK'yı belirli bir sürüm ile kur
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: 'stable'  # veya belirli bir sürüm: örneğin, '3.0.0'
+          flutter-version: '3.24.2'  # 'stable' yerine doğrudan 3.24.2 sürümünü kullanın
 
+      # Bağımlılıkları yükle
       - name: Install dependencies
         run: flutter pub get
 
-      # Test adımlarını çalıştırır
+      # Testleri çalıştır
       - name: Run tests
         run: flutter test
