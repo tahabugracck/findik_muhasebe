@@ -6,7 +6,7 @@ import 'package:findik_muhasebe/services/mongodb.dart';
 import 'package:mongo_dart/mongo_dart.dart' show where; // MongoDB'den gerekli sınıfları içe aktar
 
 class UpdateCustomerScreen extends StatefulWidget {
-  final Customer customer; // Güncellenecek müşteri nesnesi
+  final CustomerModel customer; // Güncellenecek müşteri nesnesi
 
   const UpdateCustomerScreen({super.key, required this.customer});
 
@@ -36,7 +36,7 @@ class _UpdateCustomerScreenState extends State<UpdateCustomerScreen> {
       _formKey.currentState!.save(); // Form verilerini kaydet
 
       // Güncellenmiş müşteri nesnesi oluştur
-      Customer updatedCustomer = Customer(
+      CustomerModel updatedCustomer = CustomerModel(
         id: widget.customer.id,
         name: _name,
         hazelnutAmount: _hazelnutAmount,

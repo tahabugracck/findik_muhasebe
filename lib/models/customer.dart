@@ -1,13 +1,13 @@
 import 'package:mongo_dart/mongo_dart.dart';
 
-class Customer {
+class CustomerModel {
   final ObjectId id; 
   final String name; 
   final double hazelnutAmount; 
   final String phoneNumber; 
   final List<ObjectId> userIds; 
 
-  Customer({
+  CustomerModel({
     required this.id,
     required this.name,
     required this.hazelnutAmount,
@@ -16,7 +16,7 @@ class Customer {
   });
 
   // JSON'dan Customer modeline dönüştürme
-  factory Customer.fromJson(Map<String, dynamic> json) => Customer(
+  factory CustomerModel.fromJson(Map<String, dynamic> json) => CustomerModel(
     
       id: json['_id'], 
       name: json['name'], 

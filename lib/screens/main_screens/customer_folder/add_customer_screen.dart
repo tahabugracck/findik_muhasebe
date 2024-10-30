@@ -29,7 +29,7 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
       _formKey.currentState!.save();
       
       // Yeni müşteri nesnesi oluştur
-      Customer newCustomer = Customer(
+      CustomerModel newCustomer = CustomerModel(
         id: ObjectId(), // MongoDB'den otomatik olarak ID alacağız
         name: _name,
         hazelnutAmount: _hazelnutAmount,

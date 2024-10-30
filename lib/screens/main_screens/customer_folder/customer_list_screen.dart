@@ -14,7 +14,7 @@ class CustomerListScreen extends StatefulWidget {
 }
 
 class _CustomerListScreenState extends State<CustomerListScreen> {
-  late Future<List<Customer>> _customers; // Müşterileri tutacak olan Future değişkeni
+  late Future<List<CustomerModel>> _customers; // Müşterileri tutacak olan Future değişkeni
 
   @override
   void initState() {
@@ -23,9 +23,9 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
   }
 
   // Veritabanından tüm müşterileri çeken fonksiyon
-  Future<List<Customer>> fetchCustomers() async {
+  Future<List<CustomerModel>> fetchCustomers() async {
     final customerData = await MongoDatabase.fetchAllCustomers();
-    return customerData.map((customer) => Customer.fromJson(customer)).toList(); // JSON'dan Customer modeline çevir
+    return customerData.map((customer) => CustomerModel.fromJson(customer)).toList(); // JSON'dan Customer modeline çevir
   }
 
   // Müşteriyi silme fonksiyonu
@@ -43,7 +43,7 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Müşteri Listesi')), // Uygulama çubuğunda başlık
-      body: FutureBuilder<List<Customer>>(
+      body: FutureBuilder<List<CustomerModel>>(
         future: _customers, // Beklenen müşteri listesini kullan
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
