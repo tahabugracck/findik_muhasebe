@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
 import 'package:findik_muhasebe/models/current_movements.dart';
+import 'package:findik_muhasebe/models/deposit.dart';
 import 'package:findik_muhasebe/models/payments.dart';
 import 'package:findik_muhasebe/services/constant.dart';
 import 'package:flutter/foundation.dart';
@@ -13,6 +14,7 @@ class MongoDatabase {
   static late DbCollection customersCollection;
   static late DbCollection currentMovementsCollection;
   static late DbCollection paymentsCollection;
+  static late DbCollection depositCollection;
 
   static final Logger _logger = Logger('MongoDatabase');
 
@@ -41,6 +43,7 @@ class MongoDatabase {
     customersCollection = db.collection(CUSTOMERS_COLLECTION);
     currentMovementsCollection = db.collection(CURRENTMOVEMENTS_COLLECTION);
     paymentsCollection = db.collection(PAYMENTS_COLLECTION);
+    depositCollection = db.collection(DEPOSIT_COLLECTION);
   }
 
   // MongoDB bağlantısını kapatma
@@ -136,16 +139,6 @@ static Future<List<CurrentMovementsModel>> fetchCurrentMovements() async {
   try {
     final current = await currentMovementsCollection.find().toList();
 
-    // Konsola yazdırma
-    if (kDebugMode) {
-      print('Cari Hareketler:');
-    }
-    for (var item in current) {
-      if (kDebugMode) {
-        print(item);
-      }
-    }
-
     return current.map((json) => CurrentMovementsModel.fromJson(json)).toList();
   } catch (e) {
     _logger.severe('Hareketleri çekerken hata oluştu: $e');
@@ -156,21 +149,76 @@ static Future<List<CurrentMovementsModel>> fetchCurrentMovements() async {
   return [];
 }
 
+// Cari hareket eklemek için fonksiyon
+static Future<bool> addCurrentMovement(CurrentMovementsModel movement) async {
+  try {
+    await currentMovementsCollection.insertOne(movement.toJson());
+    return true;
+  } catch (e) {
+    _logger.severe('Cari hareket eklerken hata oluştu: $e');
+    if (kDebugMode) {
+      print('Cari hareket eklerken hata oluştu: $e');
+    }
+    return false;
+  }
+}
+
+
+// Cari hareket güncellemek için fonksiyon
+static Future<bool> updateCurrentMovement(ObjectId id, CurrentMovementsModel movement) async {
+  try {
+    final result = await currentMovementsCollection.updateOne(
+      where.id(id),
+      modify.set('customerId', movement.customerId)
+            .set('transactionType', movement.transactionType)
+            .set('transactionDate', movement.transactionDate)
+            .set('amount', movement.amount)
+            .set('description', movement.description)
+            .set('balanceAfterTransaction', movement.balanceAfterTransaction)
+            .set('createdAt', movement.createdAt)
+            .set('createdId', movement.createdId),
+    );
+    return result.isSuccess;
+  } catch (e) {
+    _logger.severe('Cari hareket güncellerken hata oluştu: $e');
+    if (kDebugMode) {
+      print('Cari hareket güncellerken hata oluştu: $e');
+    }
+    return false;
+  }
+}
+
+
+// Cari hareket silmek için fonksiyon
+static Future<bool> deleteCurrentMovement(ObjectId id) async {
+  try {
+    final result = await currentMovementsCollection.deleteOne(where.id(id));
+    return result.isSuccess;
+  } catch (e) {
+    _logger.severe('Cari hareket silerken hata oluştu: $e');
+    if (kDebugMode) {
+      print('Cari hareket silerken hata oluştu: $e');
+    }
+    return false;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Tahsilat hareketleri çekmek için fonksiyon
 static Future<List<PaymentsModel>> fetchPaymentsMovements() async {
   try {
     final payments = await paymentsCollection.find().toList();
-
-    // Konsola yazdırma
-    if (kDebugMode) {
-      print('Cari Hareketler:');
-    }
-    for (var item in payments) {
-      if (kDebugMode) {
-        print(item);
-      }
-    }
 
     return payments.map((json) => PaymentsModel.fromJson(json)).toList();
   } catch (e) {
@@ -182,10 +230,113 @@ static Future<List<PaymentsModel>> fetchPaymentsMovements() async {
   return [];
 }
 
+//  Tahsilat hareketleri eklemek için fonksiyon
+static Future<bool> addPaymentMovement(PaymentsModel payment) async {
+  try {
+    await paymentsCollection.insertOne(payment.toJson());
+    return true;
+  } catch (e) {
+    _logger.severe('Tahsilat hareketi eklerken hata oluştu: $e');
+    if (kDebugMode) {
+      print('Tahsilat hareketi eklerken hata oluştu: $e');
+    }
+    return false;
+  }
+}
+
+
+// Tahsilat hareketleri güncellemek için fonksiyon
+static Future<bool> updatePaymentMovement(ObjectId id, PaymentsModel payment) async {
+  try {
+    final result = await paymentsCollection.updateOne(
+      where.id(id),
+      modify.set('customerId', payment.customerId)
+            .set('createdBy', payment.createdBy)
+            .set('collectionDate', payment.collectionDate)
+            .set('amount', payment.amount)
+            .set('method', payment.method)
+            .set('description', payment.description)
+            .set('createdAt', payment.createdAt),
+    );
+    return result.isSuccess;
+  } catch (e) {
+    _logger.severe('Tahsilat hareketi güncellerken hata oluştu: $e');
+    if (kDebugMode) {
+      print('Tahsilat hareketi güncellerken hata oluştu: $e');
+    }
+    return false;
+  }
+}
+
+
+// Tahsilat hareketi silmek için fonksiyon
+static Future<bool> deletePaymentMovement(ObjectId id) async {
+  try {
+    final result = await paymentsCollection.deleteOne(where.id(id));
+    return result.isSuccess;
+  } catch (e) {
+    _logger.severe('Tahsilat hareketi silerken hata oluştu: $e');
+    if (kDebugMode) {
+      print('Tahsilat hareketi silerken hata oluştu: $e');
+    }
+    return false;
+  }
+}
 
 
 
 
+// Emanetleri veri tabanından çeken fonksiyon
+static Future<List<Map<String, dynamic>>> fetchAllDeposit() async {
+  try {
+    final deposit = await depositCollection.find().toList();
+    return deposit;
+  } catch (e) {
+    _logger.severe('Emanetleri çekerken bir hata oluştu: $e');
+    if (kDebugMode) {
+      print('Emanetleri çekerken bir hata oluştu: $e');
+    }
+    return []; // eğer hata oluşursa boş liste döndür
+  }
+}
+
+// Emanet ekleme fonksiyonu
+static Future<void> addDeposit(DepositModel deposit) async {
+  try {
+    await depositCollection.insertOne(deposit.toJson());
+  } catch (e) {
+    // Hata durumunda gerekli işlemleri yapabilirsiniz
+    throw Exception('Emanet eklenirken hata oluştu: $e');
+  }
+}
+
+// Emanet silme fonksiyonu
+static Future<void> deleteDeposit(ObjectId id) async {
+  try {
+    await depositCollection.deleteOne(where.eq('_id', id));
+  } catch (e) {
+    // Hata durumunda gerekli işlemleri yapabilirsiniz
+    throw Exception('Emanet silinirken hata oluştu: $e');
+  }
+}
+
+// Emanet güncelleme fonksiyonu
+static Future<void> updateDeposit(DepositModel deposit) async {
+  try {
+    await depositCollection.updateOne(
+      where.eq('_id', deposit.id),
+      modify.set('customerId', deposit.customerId)
+            .set('itemName', deposit.itemName)
+            .set('quantity', deposit.quantity)
+            .set('transactionDate', deposit.transactionDate)
+            .set('status', deposit.status)
+            .set('description', deposit.description),
+    );
+  } catch (e) {
+    // Hata durumunda gerekli işlemleri yapabilirsiniz
+    throw Exception('Emanet güncellenirken hata oluştu: $e');
+  }
+}
 
 
 

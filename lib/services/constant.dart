@@ -15,3 +15,6 @@ const  CURRENTMOVEMENTS_COLLECTION = "currentMovements";
 
 // payments koleksiyon bağlantısı
 const PAYMENTS_COLLECTION = "payments";
+
+// deposit koleksiyonu bağlantısı
+const DEPOSIT_COLLECTION = "deposit";

@@ -1,8 +1,8 @@
 // ignore_for_file: library_private_types_in_public_api
 
-import 'package:findik_muhasebe/screens/main_screens/account_movements_screen.dart';
+import 'package:findik_muhasebe/screens/main_screens/account_movements_folder/account_movements_screen.dart';
 import 'package:findik_muhasebe/screens/main_screens/customer_folder/customer_screen.dart';
-import 'package:findik_muhasebe/screens/main_screens/entrusted_and_factory_operations_folder/entrusted_and_factory_operations_screen.dart';
+import 'package:findik_muhasebe/screens/main_screens/deposit_folder/deposit_screen.dart';
 import 'package:findik_muhasebe/screens/main_screens/invoice_screen.dart';
 import 'package:findik_muhasebe/screens/main_screens/login_screen.dart';
 import 'package:findik_muhasebe/screens/main_screens/price_update_screen.dart';
@@ -108,7 +108,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   if (widget.user.accessRights['accountMovements'] == true) // Cari Hareketler erişimi
                     buildListTile(Icons.account_balance, 'Cari Hareketler', const AccountMovementsScreen()),
                   if (widget.user.accessRights['entrustedAndFactoryOperations'] == true) // Fabrika İşlemleri erişimi
-                    buildListTile(Icons.factory, 'Fabrika İşlemleri ve Emanet İşlemleri', const EntrustedAndFactoryOperationsScreen()),
+                    buildListTile(Icons.factory, 'Emanet İşlemleri', const DepositScreen()),
                   if (widget.user.accessRights['productOperations'] == true) // Ürün işlemleri erişimi
                     buildListTile(Icons.storage, 'Stok', const ProductOperationsScreen()),
                   if (widget.user.accessRights['invoiceOperations'] == true) // Fatura işlemleri erişimi

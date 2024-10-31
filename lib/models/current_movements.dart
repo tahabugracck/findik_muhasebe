@@ -1,10 +1,12 @@
+// Cari hareketler
+
 import 'package:mongo_dart/mongo_dart.dart';
 
 class CurrentMovementsModel {
   final ObjectId id;
  final ObjectId customerId; // İşlemin hangi müşteriye ait olduğunu belirtir.
  final String transactionType; // İşlem türünü belirtiyor
- final DateTime transactionDate; // İşlemin gerçekleştiği tarih
+  final DateTime transactionDate; // İşlemin gerçekleştiği tarih
  final double amount; //  İşlem tutarı
  final String description; // Açıklama
  final double balanceAfterTransaction; // İşlem sonrasında müşterinin hesabındaki toplam bakiye miktarını belirtir
@@ -41,11 +43,11 @@ class CurrentMovementsModel {
         '_id': id,
         'customerId': customerId,
         'transactionType': transactionType,
-        'transactionDate': transactionDate.toIso8601String(),
+        'transactionDate': transactionDate,
         'amount': amount,
         'description': description,
         'balanceAfterTransaction': balanceAfterTransaction,
-        'createdAt': createdAt.toIso8601String(),
+        'createdAt': createdAt,
         'createdId': createdId,
       };
 }
