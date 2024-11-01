@@ -4,7 +4,6 @@ import 'package:findik_muhasebe/screens/main_screens/home_screen.dart';
 import 'package:findik_muhasebe/screens/main_screens/login_screen.dart';
 import 'package:findik_muhasebe/services/mongodb.dart';
 import 'package:findik_muhasebe/widgets/theme_notifier.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:findik_muhasebe/models/user_admin.dart';
@@ -12,9 +11,6 @@ import 'package:findik_muhasebe/models/user_admin.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await MongoDatabase.connect();
-
-
-
 
   runApp(const MyApp());
 }
@@ -35,7 +31,8 @@ class MyApp extends StatelessWidget {
           return MaterialApp(
             title: 'Fındık Muhasebe',
             theme: themeNotifier.currentTheme, // Geçerli temayı al
-          home: const LoginScreen(), // Counter widget'ını başlangıç ekranı yap
+            home:
+                const LoginScreen(), // Counter widget'ını başlangıç ekranı yap
 
             routes: {
               '/home': (context) => HomeScreen(
@@ -48,6 +45,7 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
 class Counter extends StatefulWidget {
   const Counter({super.key});
 
@@ -70,7 +68,10 @@ class _CounterState extends State<Counter> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Text('$_counter', style: Theme.of(context).textTheme.headlineMedium), // Sayacın değerini göster
+          Text('$_counter',
+              style: Theme.of(context)
+                  .textTheme
+                  .headlineMedium), // Sayacın değerini göster
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: _incrementCounter, // Butona tıklanınca sayacı artır

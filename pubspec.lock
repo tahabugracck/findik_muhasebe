@@ -26,7 +26,7 @@ packages:
     source: hosted
     version: "2.1.1"
   bson:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: bson
       sha256: "5a286c4cb9944ab21287579d1f664eb8300daa91d80938349b1a244d165a6ba5"

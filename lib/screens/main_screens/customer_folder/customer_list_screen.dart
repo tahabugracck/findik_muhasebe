@@ -42,7 +42,7 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Müşteri Listesi')), // Uygulama çubuğunda başlık
+ // Uygulama çubuğunda başlık
       body: FutureBuilder<List<CustomerModel>>(
         future: _customers, // Beklenen müşteri listesini kullan
         builder: (context, snapshot) {

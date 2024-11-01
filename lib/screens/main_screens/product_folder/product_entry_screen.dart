@@ -13,15 +13,17 @@ class ProductEntryScreen extends StatefulWidget {
 class _ProductEntryScreenState extends State<ProductEntryScreen> {
   final TextEditingController _quantityController = TextEditingController();
   final TextEditingController _qualityController = TextEditingController();
-  final TextEditingController _dateController = TextEditingController();
   final TextEditingController _ownerController = TextEditingController();
+  DateTime? _selectedDate;
 
   void submit() {
     // Ürün girişini kaydetme işlemi
     final quantity = _quantityController.text;
     final quality = _qualityController.text;
-    final date = _dateController.text;
     final owner = _ownerController.text;
+
+    // Tarih formatını ayarlama
+    String date = _selectedDate != null ? "${_selectedDate!.day}/${_selectedDate!.month}/${_selectedDate!.year}" : 'Tarih Seçilmedi';
 
     // Example usage of the variables
     if (kDebugMode) {
@@ -34,8 +36,8 @@ class _ProductEntryScreenState extends State<ProductEntryScreen> {
     // Formu sıfırlama
     _quantityController.clear();
     _qualityController.clear();
-    _dateController.clear();
     _ownerController.clear();
+    _selectedDate = null;
 
     // Başarılı bir şekilde kaydedildi mesajı
     ScaffoldMessenger.of(context).showSnackBar(
@@ -43,12 +45,23 @@ class _ProductEntryScreenState extends State<ProductEntryScreen> {
     );
   }
 
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate ?? DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+    if (picked != null && picked != _selectedDate) {
+      setState(() {
+        _selectedDate = picked;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Ürün Girişi'),
-      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -64,8 +77,13 @@ class _ProductEntryScreenState extends State<ProductEntryScreen> {
               keyboardType: TextInputType.number,
             ),
             TextField(
-              controller: _dateController,
-              decoration: const InputDecoration(labelText: 'Tarih (gg/aa/yyyy)'),
+              readOnly: true, // Kullanıcının tarih alanını doğrudan değiştirmesini engeller
+              onTap: () => _selectDate(context),
+              decoration: InputDecoration(
+                labelText: 'Tarih',
+                hintText: _selectedDate != null ? "${_selectedDate!.day}/${_selectedDate!.month}/${_selectedDate!.year}" : 'Tarih Seçin',
+                suffixIcon: const Icon(Icons.calendar_today),
+              ),
             ),
             TextField(
               controller: _ownerController,

@@ -1,13 +1,16 @@
 backend
 
--cari hareketler ve tahsilat tablosunun ne işe yaradığını öğren veritabanı eklentisini yap
--fabrika ve emanet ekranının fonksiyonlarını yaz. usersa bağla. 
 -ürün işlemleri fonksiyon yaz.
 -hesap hareketleri fonksiyonları düzelt
 -kasa ekranını düzetl
 -rapor hareketleri muhtemelen veritabanına bağlanmaz ama nasıl çalışması gerektiğini öğren
 -ayarlar kullanıcı bilgileri: kullanıcı adı ve şifre görünmesi lazım. güncelle butonu ile değiştirilmeli
 -ayalar hakkında kısmını düzenle
+-cari ve tahsilatların fonksiyonlarını yaz
+-sales_screende satış şuan GERÇEKLEŞMİYOR. düzelt
+-ürün ekleme şuan çalışmıyor
+-kasa ekranında ekleme işleminden sonra uygulama kapanıyor. nasıl mümkün anlamadım :d 
+
 
 
 frontend
@@ -21,61 +24,14 @@ frontend
 -rapor ekranının tasarımını yenile
 -fiyat çekme ekranının tasarımını yenile.
 -tema renklerini düzenle
+-müşteri ekranını düzenle
+
+-standart tema rengini değiştir (daha yumuşak, açık tonlarda tyeşil olabilir kahverengi opsiyonel)
+-sağ üstteki debug yazısını kaldır
+-enter basınca giriş yapsın
 
 soru
 -fatura işlemleri gerekli mi öğren
 
 
-## Flutterda veritabanında bir tarih formatı varsa bunu şu şekilde yaz.
-/*
-  import 'package:mongo_dart/mongo_dart.dart';
 
-class PaymentsModel {
-  ObjectId id;
-  ObjectId customerId;
-  ObjectId createdBy;
-  DateTime collectionDate;
-  double amount;
-  String method;
-  String description;
-  DateTime createdAt;
-
-  PaymentsModel({
-    required this.id,
-    required this.customerId,
-    required this.createdBy,
-    required this.collectionDate,
-    required this.amount,
-    required this.method,
-    required this.description,
-    required this.createdAt,
-  });
-
-  factory PaymentsModel.fromJson(Map<String, dynamic> json) => PaymentsModel(
-        id: json["_id"],
-        customerId: json["customerId"],
-        createdBy: json["createdBy"],
-        collectionDate: json["collectionDate"], // Herhangi bir değişikli YOK
-        amount: json["amount"],
-        method: json["method"],
-        description: json["description"],
-        createdAt: json["createdAt"], // Herhangi bir değişikli YOK
-      );
-
-  get title => null;
-
-  Map<String, dynamic> toJson() => {
-        "_id": id,
-        "customerId": customerId,
-        "createdBy": createdBy,
-        "collectionDate": collectionDate.toIso8601String,
-        "amount": amount,
-        "method": method,
-        "description": description,
-        "createdAt": createdAt.toIso8601String,
-      };
-}
-
-
-
-*/
