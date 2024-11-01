@@ -18,3 +18,6 @@ const PAYMENTS_COLLECTION = "payments";
 
 // deposit koleksiyonu bağlantısı
 const DEPOSIT_COLLECTION = "deposit";
+
+// productOperations koleksiyonu bağlantısı
+const PRODUCTOPERATIONS_COLLECTION = "productOperations";

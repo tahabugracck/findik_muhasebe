@@ -1,6 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:findik_muhasebe/screens/main_screens/account_movements_folder/account_movements_screen.dart';
+import 'package:findik_muhasebe/screens/main_screens/cash_folder/cash_register_screen.dart';
 import 'package:findik_muhasebe/screens/main_screens/customer_folder/customer_screen.dart';
 import 'package:findik_muhasebe/screens/main_screens/deposit_folder/deposit_screen.dart';
 import 'package:findik_muhasebe/screens/main_screens/invoice_screen.dart';
@@ -114,7 +115,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   if (widget.user.accessRights['invoiceOperations'] == true) // Fatura işlemleri erişimi
                     buildListTile(Icons.account_balance_wallet, 'Fatura İşlemleri', const InvoiceScreen()),
                   if (widget.user.accessRights['cashOperations'] == true) // Kasa işlemleri erişimi
-                   // buildListTile(Icons.account_balance_wallet, 'Kasa İşlemleri', const CashRegisterScreen()),
+                    buildListTile(Icons.account_balance_wallet, 'Kasa İşlemleri', const CashRegisterScreen()),
                   if (widget.user.accessRights['report'] == true) // Rapor erişimi
                     buildListTile(Icons.assessment, 'Rapor', const ReportScreen()),
                   if (widget.user.accessRights['priceUpdate'] == true) // Fiyat güncelle erişimi

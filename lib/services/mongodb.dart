@@ -3,6 +3,7 @@
 import 'package:findik_muhasebe/models/current_movements.dart';
 import 'package:findik_muhasebe/models/deposit.dart';
 import 'package:findik_muhasebe/models/payments.dart';
+import 'package:findik_muhasebe/models/product_operations.dart';
 import 'package:findik_muhasebe/services/constant.dart';
 import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
@@ -15,6 +16,7 @@ class MongoDatabase {
   static late DbCollection currentMovementsCollection;
   static late DbCollection paymentsCollection;
   static late DbCollection depositCollection;
+  static late DbCollection productOperations;
 
   static final Logger _logger = Logger('MongoDatabase');
 
@@ -44,6 +46,7 @@ class MongoDatabase {
     currentMovementsCollection = db.collection(CURRENTMOVEMENTS_COLLECTION);
     paymentsCollection = db.collection(PAYMENTS_COLLECTION);
     depositCollection = db.collection(DEPOSIT_COLLECTION);
+    productOperations = db.collection(PRODUCTOPERATIONS_COLLECTION);
   }
 
   // MongoDB bağlantısını kapatma
@@ -338,111 +341,205 @@ static Future<void> updateDeposit(DepositModel deposit) async {
   }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
- // Kart hareketini eklemek için metod
-  static Future<void> addCardMovement(
-      String userId, Map<String, dynamic> data) async {
-    try {
-      var collection = db.collection('users'); // users koleksiyonuna erişim
-      var result = await collection.updateOne(
-        where.eq(
-            '_id',
-            ObjectId.fromHexString(
-                userId)), // Kullanıcı kimliğine göre kullanıcı bulunuyor.
-        modify.push('card', {
-          // 'card' alt objesine veri push ediliyor
-          'to_from': data['to_from'], // Gönderen/Alıcı bilgisi
-          'amount': data['amount'], // İşlem tutarı
-          'transactionDate': DateTime.parse(data[
-              'transactionDate']), // Tarih bilgisi doğru formatta gönderiliyor
-          'description': data['description'], // İşlem açıklaması
-          '_id': ObjectId(), // Her işlem için benzersiz bir ObjectId ekleniyor.
-          'incoming': data['incoming'], // Gelir/gider olduğunu belirtiyor
-        }),
-      );
-
-      if (result.isSuccess) {
-        if (kDebugMode) {
-          print('Kart hareketi başarıyla eklendi: $data');
-        }
-      } else {
-        if (kDebugMode) {
-          print('Kart hareketi eklenemedi: ${result.writeError}');
-        }
-      }
-    } catch (e) {
-      if (kDebugMode) {
-        print('Veritabanına eklerken hata: $e');
-      }
+// Ürün işlemleri verilerini çekme fonksiyonu
+static Future<List<Map<String, dynamic>>> fetchProductOperations() async {
+  try {
+    final product = await productOperations.find().toList();
+    return product; 
+  } catch (e) {
+    _logger.severe('Ürün işlemlerini çekerken bir hata oluştu: $e');
+    if (kDebugMode) {
+      print('Ürün işlemlerini çekerken bir hata oluştu: $e');
+    }
+    return [];
+  }
+}
+
+// Ürün satışı için fonksiyon
+static Future<void> updateProductQuantity(ObjectId id, double newQuantity) async {
+    var collection = db.collection('product_operations');
+    await collection.updateOne(where.eq('_id', id), modify.set('quantity', newQuantity));
+  }
+
+// Ürün ekleme  fonksiyonu
+static Future<void> addProductOperation(ProductOperationsModel productOperation) async {
+  try {
+    var collection = db.collection('product_operations');
+    await collection.insertOne(productOperation.toJson());
+  } catch (e) {
+    _logger.severe('Ürün kaydederken hata oluştu: $e');
+    if (kDebugMode) {
+      print('Ürün kaydederken hata oluştu: $e');
     }
   }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
+// Nakit gelir hareketlerini çeken metod
+  static Future<List<Map<String, dynamic>>> getCashIncomeMovements() async{
+    try {
+      final movements =
+          await usersCollection.find({'cash.incoming': true}).toList();
+
+      return movements
+          .expand((user) => user['cash'] as List<dynamic>)
+          .where((cash) => cash['incoming'] == true)
+          .map((cash) {
+        return {
+          "description": cash["description"] ?? "Açıklama Yok",
+          "date": cash["transactionDate"] ?? "Tarih Yok",
+          "amount": cash["amount"]?.toString() ?? "0",
+          "to_from":
+              cash["to_from"] ?? "Gönderen Bilgisi Yok", // Gönderen bilgisi
+        };
+      }).toList();
+    } catch (e) {
+      _logger.severe('Nakit gelir hareketlerini çekerken hata oluştu: $e');
+      return [];
+    }
+  }
+
+// Nakit gider hareketlerini çeken metod
+  static Future<List<Map<String, dynamic>>> getCashExpenseMovements() async{
+    try {
+      final movements =
+          await usersCollection.find({'cash.incoming': false}).toList();
+
+      return movements
+          .expand((user) => user['cash'] as List<dynamic>)
+          .where((cash) => cash['incoming'] == false)
+          .map((cash) {
+        return {
+          "description": cash["description"] ?? "Açıklama Yok",
+          "date": cash["transactionDate"] ?? "Tarih Yok",
+          "amount": cash["amount"]?.toString() ?? "0",
+          "to_from":
+              cash["to_from"] ?? "Gönderen Bilgisi Yok", // Gönderen bilgisi
+        };
+      }).toList();
+    } catch (e) {
+      _logger.severe('Nakit gider hareketlerini çekerken hata oluştu: $e');
+      return [];
+    }
+  }
+
+
+// Kart gider hareketlerini çeken metod
+  static Future<List<Map<String,dynamic>>> getCardsExpenseMovements() async{
+    try {
+      final movements =
+          await usersCollection.find({'card.incoming': false}).toList();
+
+      return movements
+          .expand((user) => user['card'] as List<dynamic>)
+          .where((card) => card['incoming'] == false)
+          .map((card) {
+        return {
+          "description": card["description"] ?? "Açıklama Yok",
+          "date": card["transactionDate"] ?? "Tarih Yok",
+          "amount": card["amount"]?.toString() ?? "0",
+          "to_from":
+              card["to_from"] ?? "Gönderen Bilgisi Yok", // Gönderen bilgisi
+        };
+      }).toList();
+    } catch (e) {
+      _logger.severe('Kart gider hareketlerini çekerken hata oluştu: $e');
+      return [];
+    }
+  }
+
+// Kart gelir hareketlerini çeken metod
+  static Future<List<Map<String,dynamic>>> getCardsIncomeMovements() async{
+    try {
+      final movements =
+          await usersCollection.find({'card.incoming': true}).toList();
+
+      return movements
+          .expand((user) => user['card'] as List<dynamic>)
+          .where((card) => card['incoming'] == true)
+          .map((card) {
+        return {
+          "description": card["description"] ?? "Açıklama Yok",
+          "date": card["transactionDate"] ?? "Tarih Yok",
+          "amount": card["amount"]?.toString() ?? "0",
+          "to_from":
+              card["to_from"] ?? "Gönderen Bilgisi Yok", // Gönderen bilgisi
+        };
+      }).toList();
+    } catch (e) {
+      _logger.severe('Kart gelir hareketlerini çekerken hata oluştu: $e');
+      return [];
+    }
+  }
+
+
 // Nakit hareketini eklemek için metod
-  static Future<void> addCashMovement(
+  static Future<void> addCardMovement(
       String userId, Map<String, dynamic> movement) async {
     try {
       var collection = db.collection('users'); // 'users' koleksiyonuna erişim
@@ -479,102 +576,42 @@ static Future<void> updateDeposit(DepositModel deposit) async {
     }
   }
 
-// Kart gelir hareketlerini çeken metod
-  static Future<List<Map<String, dynamic>>> getCardsIncomeMovements() async {
+ // Kart hareketini eklemek için metod
+  static Future<void> addCashMovement(
+    
+      String userId, Map<String, dynamic> data) async {
     try {
-      final movements =
-          await usersCollection.find({'card.incoming': true}).toList();
+      var collection = db.collection('users'); // users koleksiyonuna erişim
+      var result = await collection.updateOne(
+        where.eq(
+            '_id',
+            ObjectId.fromHexString(
+                userId)), // Kullanıcı kimliğine göre kullanıcı bulunuyor.
+        modify.push('card', {
+          // 'card' alt objesine veri push ediliyor
+          'to_from': data['to_from'], // Gönderen/Alıcı bilgisi
+          'amount': data['amount'], // İşlem tutarı
+          'transactionDate': DateTime.parse(data[
+              'transactionDate']), // Tarih bilgisi doğru formatta gönderiliyor
+          'description': data['description'], // İşlem açıklaması
+          '_id': ObjectId(), // Her işlem için benzersiz bir ObjectId ekleniyor.
+          'incoming': data['incoming'], // Gelir/gider olduğunu belirtiyor
+        }),
+      );
 
-      return movements
-          .expand((user) => user['card'] as List<dynamic>)
-          .where((card) => card['incoming'] == true)
-          .map((card) {
-        return {
-          "description": card["description"] ?? "Açıklama Yok",
-          "date": card["transactionDate"] ?? "Tarih Yok",
-          "amount": card["amount"]?.toString() ?? "0",
-          "to_from":
-              card["to_from"] ?? "Gönderen Bilgisi Yok", // Gönderen bilgisi
-        };
-      }).toList();
+      if (result.isSuccess) {
+        if (kDebugMode) {
+          print('Kart hareketi başarıyla eklendi: $data');
+        }
+      } else {
+        if (kDebugMode) {
+          print('Kart hareketi eklenemedi: ${result.writeError}');
+        }
+      }
     } catch (e) {
-      _logger.severe('Kart gelir hareketlerini çekerken hata oluştu: $e');
-      return [];
+      if (kDebugMode) {
+        print('Veritabanına eklerken hata: $e');
+      }
     }
   }
-
-// Kart gider hareketlerini çeken metod
-  static Future<List<Map<String, dynamic>>> getCardsExpenseMovements() async {
-    try {
-      final movements =
-          await usersCollection.find({'card.incoming': false}).toList();
-
-      return movements
-          .expand((user) => user['card'] as List<dynamic>)
-          .where((card) => card['incoming'] == false)
-          .map((card) {
-        return {
-          "description": card["description"] ?? "Açıklama Yok",
-          "date": card["transactionDate"] ?? "Tarih Yok",
-          "amount": card["amount"]?.toString() ?? "0",
-          "to_from":
-              card["to_from"] ?? "Gönderen Bilgisi Yok", // Gönderen bilgisi
-        };
-      }).toList();
-    } catch (e) {
-      _logger.severe('Kart gider hareketlerini çekerken hata oluştu: $e');
-      return [];
-    }
-  }
-
-// Nakit gelir hareketlerini çeken metod
-  static Future<List<Map<String, dynamic>>> getCashIncomeMovements() async {
-    try {
-      final movements =
-          await usersCollection.find({'cash.incoming': true}).toList();
-
-      return movements
-          .expand((user) => user['cash'] as List<dynamic>)
-          .where((cash) => cash['incoming'] == true)
-          .map((cash) {
-        return {
-          "description": cash["description"] ?? "Açıklama Yok",
-          "date": cash["transactionDate"] ?? "Tarih Yok",
-          "amount": cash["amount"]?.toString() ?? "0",
-          "to_from":
-              cash["to_from"] ?? "Gönderen Bilgisi Yok", // Gönderen bilgisi
-        };
-      }).toList();
-    } catch (e) {
-      _logger.severe('Nakit gelir hareketlerini çekerken hata oluştu: $e');
-      return [];
-    }
-  }
-
-// Nakit gider hareketlerini çeken metod
-  static Future<List<Map<String, dynamic>>> getCashExpenseMovements() async {
-    try {
-      final movements =
-          await usersCollection.find({'cash.incoming': false}).toList();
-
-      return movements
-          .expand((user) => user['cash'] as List<dynamic>)
-          .where((cash) => cash['incoming'] == false)
-          .map((cash) {
-        return {
-          "description": cash["description"] ?? "Açıklama Yok",
-          "date": cash["transactionDate"] ?? "Tarih Yok",
-          "amount": cash["amount"]?.toString() ?? "0",
-          "to_from":
-              cash["to_from"] ?? "Gönderen Bilgisi Yok", // Gönderen bilgisi
-        };
-      }).toList();
-    } catch (e) {
-      _logger.severe('Nakit gider hareketlerini çekerken hata oluştu: $e');
-      return [];
-    }
-  }
-*/
-
-
 }
