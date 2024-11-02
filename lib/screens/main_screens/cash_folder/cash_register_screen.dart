@@ -1,19 +1,15 @@
-/*
-// ignore_for_file: library_private_types_in_public_api
-
-import 'package:findik_muhasebe/screens/main_screens/cash_folder/add_movement_screen.dart';
 import 'package:findik_muhasebe/services/mongodb.dart';
 import 'package:findik_muhasebe/widgets/theme_notifier.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-
+import 'package:intl/intl.dart';
 
 class CashRegisterScreen extends StatefulWidget {
   const CashRegisterScreen({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _CashRegisterScreenState createState() => _CashRegisterScreenState();
 }
 
@@ -44,6 +40,7 @@ class _CashRegisterScreenState extends State<CashRegisterScreen> {
       cardIncomeMovements = await MongoDatabase.getCardsIncomeMovements();
       cardExpenseMovements = await MongoDatabase.getCardsExpenseMovements();
 
+      // Calculate totals
       totalIncome = _calculateTotal(cashIncomeMovements) +
           _calculateTotal(cardIncomeMovements);
       totalExpense = _calculateTotal(cashExpenseMovements) +
@@ -77,7 +74,7 @@ class _CashRegisterScreenState extends State<CashRegisterScreen> {
       builder: (context) {
         return Padding(
           padding: const EdgeInsets.all(16.0),
-          child: AddMovementScreen(onSubmit: (movement) async {
+          child: AddMovementForm(onSubmit: (movement) async {
             String userId = '66aa2e456d72b0822ad566e8'; // Örnek kullanıcı ID'si
 
             try {
@@ -238,16 +235,30 @@ class _CashRegisterScreenState extends State<CashRegisterScreen> {
               return Card(
                 margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                 elevation: 4,
+                shape: RoundedRectangleBorder(
+                  side: BorderSide(color: amountColor, width: 1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
                 child: ListTile(
-                  title: Text(movement["to_from"] ?? ''),
-                  subtitle: Text(DateFormat('dd/MM/yyyy')
-                      .format(DateTime.parse(movement["transactionDate"]))),
+                  contentPadding: const EdgeInsets.all(16),
+                  title: Text(movement["description"] ?? "Açıklama Yok",
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 16)),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Tarih: ${movement["date"] ?? "Tarih Yok"}'),
+                      Text(
+                          'Gönderen: ${movement["to_from"]?.isNotEmpty == true ? movement["to_from"] : "Gönderen bilgisi yoktur."}'),
+                    ],
+                  ),
                   trailing: Text(
-                    '${amountColor == Colors.green ? '+' : '-'} ${amount.toStringAsFixed(2)}',
+                    NumberFormat.currency(locale: 'tr_TR', symbol: '₺')
+                        .format(amount),
                     style: TextStyle(
-                      color: amountColor,
-                      fontWeight: FontWeight.bold,
-                    ),
+                        color: amountColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20),
                   ),
                 ),
               );
@@ -255,18 +266,148 @@ class _CashRegisterScreenState extends State<CashRegisterScreen> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            'Toplam: ${amountColor == Colors.green ? '+' : '-'} ${total.toStringAsFixed(2)}',
-            style: TextStyle(
-              color: amountColor,
-              fontWeight: FontWeight.bold,
-              fontSize: 18,
-            ),
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text(
+                '${isIncome ? 'Toplam Gelir' : 'Toplam Gider'}: ${NumberFormat.currency(locale: 'tr_TR', symbol: '₺').format(total)}',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: isIncome ? Colors.green : Colors.red,
+                ),
+              ),
+            ],
           ),
         ),
       ],
     );
   }
 }
-*/
+
+class AddMovementForm extends StatefulWidget {
+  final Function(Map<String, dynamic>) onSubmit;
+
+  const AddMovementForm({super.key, required this.onSubmit});
+
+  @override
+  // ignore: library_private_types_in_public_api
+  _AddMovementFormState createState() => _AddMovementFormState();
+}
+
+class _AddMovementFormState extends State<AddMovementForm> {
+  final _formKey = GlobalKey<FormState>();
+  String? _type = 'Kart';
+  String? _transactionType = 'Gelir';
+  DateTime _transactionDate = DateTime.now();
+  String _toFrom = '';
+  String _description = '';
+  String _amount = '';
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: _formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          DropdownButtonFormField<String>(
+            value: _type,
+            onChanged: (value) => setState(() => _type = value),
+            items: const [
+              DropdownMenuItem(value: 'Kart', child: Text('Kart')),
+              DropdownMenuItem(value: 'Nakit', child: Text('Nakit')),
+            ],
+            decoration: const InputDecoration(labelText: 'Kart/Nakit'),
+            validator: (value) => value == null ? 'Bu alan gerekli' : null,
+          ),
+          DropdownButtonFormField<String>(
+            value: _transactionType,
+            onChanged: (value) => setState(() => _transactionType = value),
+            items: const [
+              DropdownMenuItem(value: 'Gelir', child: Text('Gelir')),
+              DropdownMenuItem(value: 'Gider', child: Text('Gider')),
+            ],
+            decoration: const InputDecoration(labelText: 'Gelir/Gider'),
+            validator: (value) => value == null ? 'Bu alan gerekli' : null,
+          ),
+          TextFormField(
+            decoration: const InputDecoration(labelText: 'Tarih'),
+            initialValue: formatDate(_transactionDate),
+            onTap: () async {
+              FocusScope.of(context).requestFocus(FocusNode());
+              final selectedDate = await showDatePicker(
+                context: context,
+                initialDate: _transactionDate,
+                firstDate: DateTime(2000),
+                lastDate: DateTime(2100),
+              );
+              if (selectedDate != null && selectedDate != _transactionDate) {
+                setState(() {
+                  _transactionDate = selectedDate;
+                });
+              }
+            },
+            validator: (value) =>
+                value == null || value.isEmpty ? 'Bu alan gerekli' : null,
+          ),
+          TextFormField(
+            decoration: const InputDecoration(labelText: 'Kim tarafından'),
+            onChanged: (value) => setState(() => _toFrom = value),
+            validator: (value) =>
+                value == null || value.isEmpty ? 'Bu alan gerekli' : null,
+          ),
+          TextFormField(
+            decoration: const InputDecoration(labelText: 'Açıklama'),
+            onChanged: (value) => setState(() => _description = value),
+            validator: (value) =>
+                value == null || value.isEmpty ? 'Bu alan gerekli' : null,
+          ),
+          TextFormField(
+            decoration: const InputDecoration(labelText: 'Miktar'),
+            keyboardType: TextInputType.number,
+            onChanged: (value) => setState(() => _amount = value),
+            validator: (value) =>
+                value == null || value.isEmpty ? 'Bu alan gerekli' : null,
+          ),
+          const SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () {
+              if (_formKey.currentState?.validate() ?? false) {
+                double amount = double.tryParse(_amount) ?? 0.0;
+                if (_transactionType == 'Gelir' && amount < 0) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                        content: Text(
+                            'Gelir işlemi için negatif miktar girilemez.')),
+                  );
+                } else if (_transactionType == 'Gider' && amount > 0) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                        content: Text(
+                            'Gider işlemi için pozitif miktar girilemez.')),
+                  );
+                } else {
+                  widget.onSubmit({
+                    'type': _type,
+                    'transactionType': _transactionType,
+                    'transactionDate': formatDate(_transactionDate),
+                    'to_from': _toFrom,
+                    'description': _description,
+                    'amount': amount,
+                  });
+                  Navigator.pop(context);
+                }
+              }
+            },
+            child: const Text('Kaydet'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String formatDate(DateTime date) {
+    return DateFormat('dd/MM/yyyy').format(date);
+  }
+}
