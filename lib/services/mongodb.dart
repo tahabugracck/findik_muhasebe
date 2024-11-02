@@ -357,21 +357,69 @@ static Future<List<Map<String, dynamic>>> fetchProductOperations() async {
 
 // Ürün satışı için fonksiyon
 static Future<void> updateProductQuantity(ObjectId id, double newQuantity) async {
-    var collection = db.collection('product_operations');
-    await collection.updateOne(where.eq('_id', id), modify.set('quantity', newQuantity));
-  }
+  try {
+    // Yeni miktarın negatif olmadığından emin ol
+    if (newQuantity < 0) {
+      if (kDebugMode) {
+        print('Hata: Ürün miktarı negatif olamaz.');
+      }
+      return;
+    }
 
-// Ürün ekleme  fonksiyonu
+    final saleProduct = await productOperations.findOne(where.id(id));
+
+    if (saleProduct != null) {
+      var result = await productOperations.updateOne(
+        where.id(id),
+        modify.set('quantity', newQuantity),
+      );
+
+      // Güncelleme sonucunu kontrol et
+      if (result.isSuccess) {
+        if (kDebugMode) {
+          print('Ürün miktarı başarıyla güncellendi.');
+        }
+      } else {
+        if (kDebugMode) {
+          print('Güncelleme başarısız.');
+        }
+      }
+    } else {
+      if (kDebugMode) {
+        print('Ürün bulunamadı.');
+      }
+    }
+  } catch (e) {
+    _logger.severe('Ürün işlemlerini satarken bir hata oluştu: $e');
+    if (kDebugMode) {
+      print('Ürün işlemlerini satarken bir hata oluştu: $e');
+    }
+  }
+}
+
+
+// Ürün ekleme fonksiyonu
 static Future<void> addProductOperation(ProductOperationsModel productOperation) async {
   try {
-    var collection = db.collection('product_operations');
-    await collection.insertOne(productOperation.toJson());
+    final result = await productOperations.insertOne(productOperation.toJson());
+    
+    // İşlemin başarılı olup olmadığını kontrol et
+    if (result.isSuccess) {
+      if (kDebugMode) {
+        print('Ürün başarıyla eklendi.');
+      }
+    } else {
+      if (kDebugMode) {
+        print('Ürün eklenemedi.');
+      }
+    }
   } catch (e) {
     _logger.severe('Ürün kaydederken hata oluştu: $e');
     if (kDebugMode) {
       print('Ürün kaydederken hata oluştu: $e');
     }
   }
+
 
 
 

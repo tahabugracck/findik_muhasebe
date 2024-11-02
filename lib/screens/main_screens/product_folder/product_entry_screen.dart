@@ -14,20 +14,24 @@ class _ProductEntryScreenState extends State<ProductEntryScreen> {
   final TextEditingController _quantityController = TextEditingController();
   final TextEditingController _qualityController = TextEditingController();
   final TextEditingController _ownerController = TextEditingController();
+  final TextEditingController _createdIdController = TextEditingController();
+  
+  String? _operationType = 'stok'; 
   DateTime? _selectedDate;
 
   void submit() {
-    // Ürün girişini kaydetme işlemi
-    final quantity = _quantityController.text;
-    final quality = _qualityController.text;
+    final quantity = double.tryParse(_quantityController.text) ?? 0.0;
+    final quality = double.tryParse(_qualityController.text) ?? 0.0;
     final owner = _ownerController.text;
+    final createdId = _createdIdController.text;
+    final operationType = _operationType;
 
-    // Tarih formatını ayarlama
+
     String date = _selectedDate != null ? "${_selectedDate!.day}/${_selectedDate!.month}/${_selectedDate!.year}" : 'Tarih Seçilmedi';
 
-    // Example usage of the variables
+
     if (kDebugMode) {
-      print('Quantity: $quantity, Quality: $quality, Date: $date, Owner: $owner');
+      print('Operation Type: $operationType, Quantity: $quantity, Quality: $quality, Date: $date, Owner: $owner, Created ID: $createdId');
     }
 
     // Kaydetme işlemleri (veritabanı veya başka bir yapı)
@@ -37,6 +41,8 @@ class _ProductEntryScreenState extends State<ProductEntryScreen> {
     _quantityController.clear();
     _qualityController.clear();
     _ownerController.clear();
+    _createdIdController.clear();
+    _operationType = 'stok';
     _selectedDate = null;
 
     // Başarılı bir şekilde kaydedildi mesajı
@@ -66,6 +72,21 @@ class _ProductEntryScreenState extends State<ProductEntryScreen> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
+            DropdownButtonFormField<String>(
+              value: _operationType,
+              items: const [
+                DropdownMenuItem(value: 'stok', child: Text('Stok')),
+                DropdownMenuItem(value: 'satış', child: Text('Satış')),
+                DropdownMenuItem(value: 'giriş', child: Text('Giriş')),
+                DropdownMenuItem(value: 'çıkış', child: Text('Çıkış')),
+              ],
+              onChanged: (value) {
+                setState(() {
+                  _operationType = value;
+                });
+              },
+              decoration: const InputDecoration(labelText: 'İşlem Türü'),
+            ),
             TextField(
               controller: _quantityController,
               decoration: const InputDecoration(labelText: 'Miktar (kg)'),
@@ -77,11 +98,13 @@ class _ProductEntryScreenState extends State<ProductEntryScreen> {
               keyboardType: TextInputType.number,
             ),
             TextField(
-              readOnly: true, // Kullanıcının tarih alanını doğrudan değiştirmesini engeller
+              readOnly: true,
               onTap: () => _selectDate(context),
               decoration: InputDecoration(
                 labelText: 'Tarih',
-                hintText: _selectedDate != null ? "${_selectedDate!.day}/${_selectedDate!.month}/${_selectedDate!.year}" : 'Tarih Seçin',
+                hintText: _selectedDate != null
+                    ? "${_selectedDate!.day}/${_selectedDate!.month}/${_selectedDate!.year}"
+                    : 'Tarih Seçin',
                 suffixIcon: const Icon(Icons.calendar_today),
               ),
             ),

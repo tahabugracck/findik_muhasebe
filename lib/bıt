@@ -1,15 +1,14 @@
 backend
 
--ürün işlemleri fonksiyon yaz.
--hesap hareketleri fonksiyonları düzelt
--kasa ekranını düzetl
--rapor hareketleri muhtemelen veritabanına bağlanmaz ama nasıl çalışması gerektiğini öğren
+
+-rapor hareketleri muhtemelen veritabanına bağlanmaz ama nasıl çalışması gerektiğini öğren (veritabanında bazı şeyleri birbirine bağlamak gerekebilir)
 -ayarlar kullanıcı bilgileri: kullanıcı adı ve şifre görünmesi lazım. güncelle butonu ile değiştirilmeli
 -ayalar hakkında kısmını düzenle
 -cari ve tahsilatların fonksiyonlarını yaz
 -sales_screende satış şuan GERÇEKLEŞMİYOR. düzelt
 -ürün ekleme şuan çalışmıyor
 -kasa ekranında ekleme işleminden sonra uygulama kapanıyor. nasıl mümkün anlamadım :d 
+-ürün işlemleri ürün eklemede veritabanına eklenmiyor
 
 
 
