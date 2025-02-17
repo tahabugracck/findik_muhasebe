@@ -1,19 +1,19 @@
 backend
 
 
--rapor hareketleri muhtemelen veritabanına bağlanmaz ama nasıl çalışması gerektiğini öğren (veritabanında bazı şeyleri birbirine bağlamak gerekebilir)
+-rapor hareketleri veritabanına bağlamayı öğren (veritabanında bazı şeyleri birbirine bağlamak gerekebilir)
 -ayarlar kullanıcı bilgileri: kullanıcı adı ve şifre görünmesi lazım. güncelle butonu ile değiştirilmeli
 -ayalar hakkında kısmını düzenle
 -cari ve tahsilatların fonksiyonlarını yaz
 -sales_screende satış şuan GERÇEKLEŞMİYOR. düzelt
 -ürün ekleme şuan çalışmıyor
--kasa ekranında ekleme işleminden sonra uygulama kapanıyor. nasıl mümkün anlamadım :d 
+-kasa ekranında ekleme işleminden sonra uygulama kapanıyor.
 -ürün işlemleri ürün eklemede veritabanına eklenmiyor
 
 
 
 frontend
--loginScreende gif telfi yiyebilir. öğren
+-loginScreende gif telif yiyebilir. öğren
 -ana ekran fındık resmini düzenle (kodda)
 -müşteri ekranı tasarımı iyileştir
 -cari hareketler ve tahsilat tablosu sayfasının tasarımını iyileştir
@@ -28,9 +28,6 @@ frontend
 -standart tema rengini değiştir (daha yumuşak, açık tonlarda tyeşil olabilir kahverengi opsiyonel)
 -sağ üstteki debug yazısını kaldır
 -enter basınca giriş yapsın
-
-soru
--fatura işlemleri gerekli mi öğren
 
 
 
