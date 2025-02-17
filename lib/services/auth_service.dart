@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:mongo_dart/mongo_dart.dart';
 
 class AuthService {
-  final Db db = Db('mongodb://localhost:27017/FindikMuhasebe');
+  final Db db = Db('');
 
   Future<UserAdminModel?> login(String username, String password) async {
     try {
